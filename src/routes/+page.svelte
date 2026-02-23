@@ -20,7 +20,7 @@
 
 <svelte:head>
 	<title>quiescent</title>
-	<meta name="description" content="personal website — music, thoughts, links" />
+	<meta name="description" content="Q" />
 </svelte:head>
 
 <div class="site-container font-body">
