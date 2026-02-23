@@ -1,13 +1,6 @@
 import type { Post, PostModule } from './types';
-import { getNotionPosts, getNotionPost, type NotionPost } from './notion';
 
 export async function getPosts(): Promise<Post[]> {
-	const notionPosts = await getNotionPosts();
-
-	if (notionPosts.length > 0) {
-		return notionPosts;
-	}
-
 	const modules = import.meta.glob<PostModule>('/src/content/posts/*.md', { eager: true });
 	const posts: Post[] = [];
 
@@ -24,35 +17,14 @@ export async function getPosts(): Promise<Post[]> {
 	return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
-export async function getPost(
-	slug: string
-): Promise<{ meta: Post; content: string; isNotion: boolean } | null> {
-	const notionPost = await getNotionPost(slug);
-
-	if (notionPost) {
-		return {
-			meta: {
-				slug: notionPost.slug,
-				title: notionPost.title,
-				date: notionPost.date,
-				tags: notionPost.tags,
-				excerpt: notionPost.excerpt,
-				published: true
-			},
-			content: notionPost.content,
-			isNotion: true
-		};
-	}
-
+export async function getPost(slug: string): Promise<{ meta: Post } | null> {
 	try {
 		const module = (await import(`../content/posts/${slug}.md`)) as PostModule;
 
 		if (!module.metadata.published) return null;
 
 		return {
-			meta: { ...module.metadata, slug },
-			content: '',
-			isNotion: false
+			meta: { ...module.metadata, slug }
 		};
 	} catch {
 		return null;

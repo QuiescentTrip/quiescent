@@ -1,15 +1,21 @@
 <script lang="ts">
-	import { site } from '$lib/config';
-
-	const icons: Record<string, string> = {
-		github: '💻',
-		twitter: '🐦',
-		discord: '💬',
-		email: '✉️',
-		spotify: '🎵'
+	const socials = {
+		github: 'https://github.com',
+		twitter: 'https://twitter.com',
+		discord: 'https://discord.com',
+		email: 'mailto:hello@example.com',
+		spotify: 'https://spotify.com'
 	};
 
-	const links = Object.entries(site.socials).filter(([, url]) => url);
+	const icons: Record<string, string> = {
+		github: '[code]',
+		twitter: '[bird]',
+		discord: '[chat]',
+		email: '[mail]',
+		spotify: '[music]'
+	};
+
+	const links = Object.entries(socials).filter(([, url]) => url);
 </script>
 
 <div id="links" class="retro-box rounded-lg p-4">

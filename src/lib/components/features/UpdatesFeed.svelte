@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { updates } from '$lib/config';
+	const updates = [
+		{ date: '02/23', text: 'redesigned the whole site' },
+		{ date: '02/22', text: 'added music player' },
+		{ date: '02/21', text: 'started building' }
+	];
 </script>
 
 <div class="retro-box rounded-lg p-4">

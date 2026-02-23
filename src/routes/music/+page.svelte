@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { site } from '$lib/config';
 	import { MusicPlayer } from '$lib/components/features';
 	import { RotaryKnob } from '$lib/components/ui';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	const siteName = 'quiescent';
+	const siteAuthor = 'quiescent';
 
 	let outputVolume = $state(70);
 
@@ -22,8 +24,8 @@
 </script>
 
 <svelte:head>
-	<title>music | {site.name}</title>
-	<meta name="description" content="Music by {site.author}" />
+	<title>music | {siteName}</title>
+	<meta name="description" content="Music by {siteAuthor}" />
 </svelte:head>
 
 <div class="min-h-screen p-4 sm:p-8 relative overflow-hidden">

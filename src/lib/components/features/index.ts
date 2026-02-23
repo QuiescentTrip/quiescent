@@ -9,4 +9,3 @@ export { default as Webrings } from './Webrings.svelte';
 export { default as BlogCard } from './BlogCard.svelte';
 export { default as BlogPreview } from './BlogPreview.svelte';
 export { default as Badges } from './Badges.svelte';
-export { default as MarkdownRenderer } from './MarkdownRenderer.svelte';

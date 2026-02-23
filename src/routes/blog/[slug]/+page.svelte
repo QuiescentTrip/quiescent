@@ -1,13 +1,27 @@
 <script lang="ts">
-	import { site } from '$lib/config';
-	import { MarkdownRenderer } from '$lib/components/features';
 	import type { PageData } from './$types';
+	import type { Component } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
+
+	const siteName = 'quiescent';
+
+	const modules = import.meta.glob<{ default: Component }>('/src/content/posts/*.md');
+	
+	let PostContent: Component | null = $state(null);
+	
+	$effect(() => {
+		const loader = modules[`/src/content/posts/${data.slug}.md`];
+		if (loader) {
+			loader().then((mod) => {
+				PostContent = mod.default;
+			});
+		}
+	});
 </script>
 
 <svelte:head>
-	<title>{data.meta.title} - {site.name}</title>
+	<title>{data.meta.title} - {siteName}</title>
 </svelte:head>
 
 <div class="site-container font-body">
@@ -36,8 +50,18 @@
 		</div>
 
 		<div class="nav-title">navigate</div>
-		<a href="/">home</a>
-		<a href="/blog">all posts</a>
+		<a href="/">
+			home
+			<span class="nav-stripe-1"></span>
+			<span class="nav-stripe-2"></span>
+			<span class="nav-stripe-3"></span>
+		</a>
+		<a href="/blog">
+			all posts
+			<span class="nav-stripe-1"></span>
+			<span class="nav-stripe-2"></span>
+			<span class="nav-stripe-3"></span>
+		</a>
 	</aside>
 
 	<!-- Main -->
@@ -45,11 +69,10 @@
 		<article class="section full">
 			<h2>{data.meta.title}</h2>
 			<div class="section-content prose">
-				{#if data.isNotion && data.content}
-					<MarkdownRenderer content={data.content} />
+				{#if PostContent}
+					<PostContent />
 				{:else}
-					<p>{data.meta.excerpt}</p>
-					<p class="text-sm text-brown-light mt-3">full content requires notion.</p>
+					<p>loading...</p>
 				{/if}
 			</div>
 		</article>

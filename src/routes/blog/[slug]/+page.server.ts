@@ -14,8 +14,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	return {
 		meta: post.meta,
-		content: post.content,
-		isNotion: post.isNotion,
+		slug: params.slug,
 		relatedPosts
 	};
 };

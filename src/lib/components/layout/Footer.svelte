@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { site } from '$lib/config';
+	const siteAuthor = 'quiescent';
+	const siteEstablished = '2026';
+	const siteHosting = '';
 </script>
 
 <footer class="mt-8 retro-box rounded-lg p-6 text-center">
@@ -11,10 +13,10 @@
 		<span class="w-4 h-4 rounded-full bg-coral"></span>
 	</div>
 	<p class="text-olive-dark text-sm">
-		made with ♥ by {site.author.toLowerCase()} • est. {site.established} •
+		made with love by {siteAuthor.toLowerCase()} - est. {siteEstablished} -
 		<a href="https://neocities.org" class="text-coral hover:underline">
-			hosted on {site.hosting}
+			hosted on {siteHosting}
 		</a>
 	</p>
-	<p class="text-sage-dark text-xs mt-2">best viewed on desktop • built with svelte & tailwind</p>
+	<p class="text-sage-dark text-xs mt-2">best viewed on desktop - built with svelte & tailwind</p>
 </footer>

@@ -13,10 +13,6 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write ."
 	},
-	"dependencies": {
-		"@notionhq/client": "^2.2.15",
-		"notion-to-md": "^3.1.1"
-	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.2",
 		"@eslint/js": "^9.39.2",

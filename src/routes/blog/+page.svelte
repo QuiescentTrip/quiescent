@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { site } from '$lib/config';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	const siteName = 'quiescent';
 
 	let selectedTag = $state<string | null>(null);
 
@@ -12,7 +13,7 @@
 </script>
 
 <svelte:head>
-	<title>blog - {site.name}</title>
+	<title>blog - {siteName}</title>
 </svelte:head>
 
 <div class="site-container font-body">
@@ -45,8 +46,12 @@
 		{/each}
 
 		<div class="nav-title">navigate</div>
-		<a href="/">home</a>
-		<a href="#webrings">webrings</a>
+		<a href="/">
+			home
+			<span class="nav-stripe-1"></span>
+			<span class="nav-stripe-2"></span>
+			<span class="nav-stripe-3"></span>
+		</a>
 	</nav>
 
 	<!-- Main -->

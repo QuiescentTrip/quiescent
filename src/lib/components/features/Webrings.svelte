@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { webrings } from '$lib/config';
 	import { Badge88 } from '$lib/components/ui';
+
+	const webrings = [{ name: 'The Null Webring', prev: '#', next: '#', home: '#' }];
 </script>
 
 <div class="retro-box rounded-lg p-4">

@@ -1,46 +1,34 @@
 <script lang="ts">
-	import { site, now, updates } from '$lib/config';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
-	const navLinks = [
-		{ name: 'home', href: '/' },
-		{ name: 'blog', href: '/blog' },
-		{ name: 'music', href: '/music' },
-		{ name: 'about', href: '#about' },
-		{ name: 'links', href: '#links' }
+	const navLinks = ['/', '/blog', '/music', '#about', '#links'];
+	const navNames = ['home', 'blog', 'music', 'about', 'links'];
+
+	const updates = [
+		{ date: '02/23', text: 'added music player' },
+		{ date: '02/22', text: 'first commit of website' }
 	];
 
-	const webrings = [
-		{ name: 'Indie Web', prev: '#', next: '#' },
-		{ name: 'Personal Sites', prev: '#', next: '#' }
-	];
+	const webrings = [];
 
 	const badges = [
-		'https://cyber.dabamos.de/88x31/neocities.gif',
-		'https://cyber.dabamos.de/88x31/www.gif',
-		'https://cyber.dabamos.de/88x31/notepad.gif',
-		'https://cyber.dabamos.de/88x31/nocookie.gif',
-		'./images/buttons/blankbanshee.gif'
-	];
-
-	const links = [
-		{ name: 'Neocities', url: 'https://neocities.org' }
+		'./images/buttons/blankbanshee.gif',
 	];
 </script>
 
 <svelte:head>
-	<title>{site.name}</title>
-	<meta name="description" content={site.description} />
+	<title>quiescent</title>
+	<meta name="description" content="personal website — music, thoughts, links" />
 </svelte:head>
 
 <div class="site-container font-body">
 	<!-- Header -->
 	<header class="site-header">
 		<div>
-			<h1>{site.name}</h1>
-			<p class="tagline">{site.tagline}</p>
+			<h1>quiescent</h1>
+			<p class="tagline">adjective -- quiet, still, or inactive</p>
 		</div>
 		<div class="display-panel">
 			{new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }).toUpperCase()}
@@ -50,9 +38,9 @@
 	<!-- Navigation -->
 	<nav class="site-nav">
 		<div class="nav-title">navigate</div>
-		{#each navLinks as link}
-			<a href={link.href}>
-				{link.name}
+		{#each navLinks as href, i}
+			<a {href}>
+				{navNames[i]}
 				<span class="nav-stripe-1"></span>
 				<span class="nav-stripe-2"></span>
 				<span class="nav-stripe-3"></span>
@@ -60,21 +48,22 @@
 		{/each}
 
 		<div class="nav-title">elsewhere</div>
-		{#each links.slice(0, 3) as link}
-			<a href={link.url} target="_blank">
-				{link.name}
-				<span class="nav-stripe-1"></span>
-				<span class="nav-stripe-2"></span>
-				<span class="nav-stripe-3"></span>
-			</a>
-		{/each}
+		<a href="https://neocities.org" target="_blank">
+			Neocities
+			<span class="nav-stripe-1"></span>
+			<span class="nav-stripe-2"></span>
+			<span class="nav-stripe-3"></span>
+		</a>
 
 		<div class="status-row">
 			<span class="status-dot active"></span>
 			<span>online</span>
 		</div>
 		<div class="status-row">
-			<iframe width="155" height="155" style="border:none" src="https://dimden.neocities.org/navlink/" name="neolink"></iframe>
+			<iframe title="neocity ad" width="155" height="155" style="border:none" src="https://dimden.neocities.org/navlink/" name="neolink"></iframe>
+		</div>
+		<div class="status-row h-80">
+			<img class="rotate-90 scale-200" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDJpY2p6enBvcWlibnBoMXJxZmcweWJpOGxwZXM0MzhkZ3ZyZTVvOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13CpJR7THZgaaY/giphy.gif">
 		</div>
 	</nav>
 
@@ -85,11 +74,7 @@
 			<h2>welcome</h2>
 			<div class="section-content">
 				<p>
-					this is my personal website. i make music, write things, and collect links 
-					to interesting corners of the web.
-				</p>
-				<p>
-					no tracking, no ads. just html.
+					i am <b>quiescent</b>, a software engineer and cybersec student
 				</p>
 			</div>
 		</section>
@@ -114,24 +99,26 @@
 				<div class="status-item">
 					<span class="label">listening:</span>
 				</div>
-				<div class="lastfm-widget">
+				<div class="lastfm-widget" style="overflow:hidden; max-width:100%; height:1.6em; min-height:0; display:flex; align-items:center; padding:0;">
 					<iframe 
 						src="https://petracoding.github.io/neocities/widgets/lastfm?center=0&marquee=0&font-family=Consolas&font-size=12px&color=%234a4238&username=quiescenttrip&swapPositions=0&delimiter=by&underline=0" 
 						frameborder="0" 
 						title="Last.Fm Status"
+						style="width:100%; min-width:0; border:none; height:100%; display:block; padding:0; margin:0;"
+						scrolling="no"
 					></iframe>
 				</div>
 				<div class="status-item">
 					<span class="label">reading:</span>
-					<span class="value">{now.reading}</span>
+					<span class="value">mythos</span>
 				</div>
 				<div class="status-item">
 					<span class="label">playing:</span>
-					<span class="value">{now.playing}</span>
+					<span class="value">witcher 3</span>
 				</div>
 				<div class="status-item">
 					<span class="label">mood:</span>
-					<span class="value">{now.mood}</span>
+					<span class="value">hmm</span>
 				</div>
 			</div>
 		</section>
@@ -159,14 +146,8 @@
 			<h2>about</h2>
 			<div class="section-content">
 				<p>
-					i like making things and putting them online. this site is hand-coded.
+				i like videogames
 				</p>
-				<h3>interests</h3>
-				<ul>
-					<li>music production</li>
-					<li>web development</li>
-					<li>video games</li>
-				</ul>
 			</div>
 		</section>
 
@@ -175,15 +156,11 @@
 			<h2>links</h2>
 			<div class="section-content">
 				<h3>cool sites</h3>
-				{#each links as link}
-					<div class="entry">
-						<a href={link.url} target="_blank">{link.name}</a>
-					</div>
-				{/each}
+				<div class="entry">
+					<a href="https://neocities.org" target="_blank">Neocities</a>
+				</div>
 				<h3>find me</h3>
-				{#each Object.entries(site.socials) as [name, url]}
-					<a href={url} class="block py-0.5 text-sm">{name}</a>
-				{/each}
+				<a href="https://github.com/QuiescentTrip" class="block py-0.5 text-sm">github</a>
 			</div>
 		</section>
 
@@ -192,13 +169,17 @@
 			<h2>webrings</h2>
 			<div class="section-content">
 				<div class="flex flex-wrap gap-2">
-					{#each webrings as ring}
-						<div class="webring">
-							<a href={ring.prev}>←</a>
-							<span class="name">{ring.name}</span>
-							<a href={ring.next}>→</a>
-						</div>
-					{/each}
+					{#if webrings.length > 0}
+						{#each webrings as [name, prev, next]}
+							<div class="webring">
+								<a href={prev}>←</a>
+								<span class="name">{name}</span>
+								<a href={next}>→</a>
+							</div>
+						{/each}
+					{:else}
+						<span>none yet</span>
+					{/if}
 				</div>
 			</div>
 		</section>
@@ -208,8 +189,8 @@
 			<h2>badges</h2>
 			<div class="section-content">
 				<div class="badge-grid">
-					{#each badges as badge}
-						<img src={badge} alt="badge" class="badge-88x31" />
+					{#each badges as src}
+						<img {src} alt="badge" class="badge-88x31" />
 					{/each}
 				</div>
 			</div>
@@ -227,10 +208,8 @@
 
 	<!-- Footer -->
 	<footer class="site-footer">
-		<span>made by {site.author}</span>
+		<span>made by quiescent</span>
 		<span>·</span>
-		<span>est. {site.established}</span>
-		<span>·</span>
-		<a href="https://neocities.org">{site.hosting}</a>
+		<span>est. 2026</span>
 	</footer>
 </div>
