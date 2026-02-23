@@ -1,253 +1,322 @@
 <script lang="ts">
-	import { tracks } from '$lib/data/music';
+	import type { Track } from '$lib/data/music';
+
+	type Props = {
+		tracks: Track[];
+		title?: string;
+	};
+
+	let { tracks, title }: Props = $props();
 
 	let isPlaying = $state(false);
 	let currentTrack = $state(0);
 	let progress = $state(0);
+	let currentTime = $state(0);
+	let duration = $state(0);
+	let audioElement: HTMLAudioElement | null = $state(null);
+	let shouldAutoplay = $state(false);
 
 	const track = $derived(tracks[currentTrack]);
+	const hasAudio = $derived(track?.file != null);
+
+	function formatTime(seconds: number): string {
+		if (!seconds || !isFinite(seconds)) return '0:00';
+		const mins = Math.floor(seconds / 60);
+		const secs = Math.floor(seconds % 60);
+		return `${mins}:${secs.toString().padStart(2, '0')}`;
+	}
 
 	function toggle() {
-		isPlaying = !isPlaying;
+		if (!audioElement || !hasAudio) return;
+		if (isPlaying) {
+			audioElement.pause();
+			isPlaying = false;
+		} else {
+			audioElement.play();
+			isPlaying = true;
+		}
 	}
+
 	function next() {
+		if (tracks.length === 0) return;
+		shouldAutoplay = isPlaying;
 		currentTrack = (currentTrack + 1) % tracks.length;
 		progress = 0;
+		currentTime = 0;
 	}
+
 	function prev() {
+		if (tracks.length === 0) return;
+		shouldAutoplay = isPlaying;
 		currentTrack = currentTrack === 0 ? tracks.length - 1 : currentTrack - 1;
 		progress = 0;
+		currentTime = 0;
 	}
+
 	function select(index: number) {
+		if (index === currentTrack && audioElement) {
+			toggle();
+			return;
+		}
+		shouldAutoplay = true;
 		currentTrack = index;
 		progress = 0;
-		isPlaying = true;
+		currentTime = 0;
 	}
 
-	$effect(() => {
-		if (!isPlaying) return;
-		const interval = setInterval(() => {
-			progress = Math.min(progress + 1, 100);
-			if (progress >= 100) next();
-		}, 300);
-		return () => clearInterval(interval);
-	});
+	function handleTimeUpdate() {
+		if (!audioElement) return;
+		currentTime = audioElement.currentTime;
+		duration = audioElement.duration || 0;
+		progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+	}
+
+	function handleEnded() {
+		shouldAutoplay = true;
+		next();
+	}
+
+	function handleLoadedMetadata() {
+		if (audioElement) {
+			duration = audioElement.duration;
+		}
+	}
+
+	function handleCanPlay() {
+		if (shouldAutoplay && audioElement) {
+			audioElement.play();
+			isPlaying = true;
+			shouldAutoplay = false;
+		}
+	}
 </script>
 
-<div class="player">
-	<!-- Now Playing -->
-	<div class="now-playing">
-		<div class="album-art">
-			{isPlaying ? '▶' : '♪'}
-		</div>
-		<div class="track-info">
-			<p class="title">{track.title}</p>
-			<p class="artist">{track.artist}</p>
-			<p class="duration">{track.duration}</p>
+{#if tracks.length === 0}
+	<div class="player">
+		<div class="display">
+			<div class="display-row">
+				<span class="track-title">No tracks</span>
+			</div>
 		</div>
 	</div>
+{:else}
+	<!-- Hidden audio element -->
+	{#if track?.file}
+		<audio
+			bind:this={audioElement}
+			src={track.file}
+			ontimeupdate={handleTimeUpdate}
+			onended={handleEnded}
+			onloadedmetadata={handleLoadedMetadata}
+			oncanplay={handleCanPlay}
+		></audio>
+	{/if}
 
-	<!-- Progress -->
-	<div class="progress-bar">
-		<div class="progress-fill" style="width: {progress}%"></div>
-	</div>
+	<div class="player">
+		{#if title}
+			<div class="player-title">{title}</div>
+		{/if}
 
-	<!-- Controls -->
-	<div class="controls">
-		<button onclick={prev} class="control-btn" aria-label="Previous">⏮</button>
-		<button onclick={toggle} class="play-btn" aria-label={isPlaying ? 'Pause' : 'Play'}>
-			{isPlaying ? '⏸' : '▶'}
-		</button>
-		<button onclick={next} class="control-btn" aria-label="Next">⏭</button>
-	</div>
+		<!-- Display -->
+		<div class="display">
+			<div class="display-row">
+				<span class="track-num">{(currentTrack + 1).toString().padStart(2, '0')}</span>
+				<span class="track-title">{track?.title ?? 'Unknown'}</span>
+			</div>
+			<div class="display-row secondary">
+				<span>{track?.artist ?? 'Unknown'}</span>
+				<span>{formatTime(currentTime)} / {formatTime(duration)}</span>
+			</div>
+		</div>
 
-	<!-- Playlist -->
-	<div class="playlist">
-		<p class="playlist-label">playlist</p>
-		{#each tracks as t, i}
-			<button
-				onclick={() => select(i)}
-				class="track-item"
-				class:active={i === currentTrack}
-			>
-				<span class="track-icon">{i === currentTrack && isPlaying ? '▶' : '♪'}</span>
-				<span class="track-title">{t.title}</span>
-				<span class="track-duration">{t.duration}</span>
-			</button>
-		{/each}
+		<!-- Progress -->
+		<div class="progress">
+			<div class="progress-fill" style="width: {progress}%"></div>
+		</div>
+
+		<!-- Controls -->
+		<div class="controls">
+			<button onclick={prev} class="ctrl-btn">◄◄</button>
+			<button onclick={toggle} class="ctrl-btn play" disabled={!hasAudio}>{isPlaying ? '■' : '►'}</button>
+			<button onclick={next} class="ctrl-btn">►►</button>
+		</div>
+
+		<!-- Track List -->
+		<div class="tracklist">
+			{#each tracks as t, i}
+				<button
+					onclick={() => select(i)}
+					class="track"
+					class:active={i === currentTrack}
+				>
+					<span class="num">{(i + 1).toString().padStart(2, '0')}</span>
+					<span class="name">{t.title}</span>
+					{#if !t.file}
+						<span class="no-file">⚠</span>
+					{/if}
+				</button>
+			{/each}
+		</div>
 	</div>
-</div>
+{/if}
 
 <style>
 	.player {
-		background: var(--color-olive-dark);
-		border: 2px solid var(--color-sage);
-		padding: 1rem;
-		color: var(--color-peach-light);
+		background: var(--color-beige);
+		border: 2px solid var(--color-tan-dark);
+		padding: 0.75rem;
 	}
 
-	.now-playing {
-		display: flex;
-		gap: 1rem;
-		margin-bottom: 1rem;
-	}
-
-	.album-art {
-		width: 60px;
-		height: 60px;
-		background: linear-gradient(135deg, var(--color-coral) 0%, var(--color-orange) 100%);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 1.5rem;
-		color: white;
-		flex-shrink: 0;
-	}
-
-	.track-info {
-		min-width: 0;
-		flex: 1;
-	}
-
-	.title {
-		font-size: 0.9rem;
-		color: var(--color-peach-light);
-		font-weight: 500;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.artist {
-		font-size: 0.8rem;
-		color: var(--color-peach-dark);
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.duration {
-		font-size: 0.7rem;
-		color: var(--color-sage);
+	.player-title {
 		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-brown);
+		margin-bottom: 0.5rem;
+		padding-bottom: 0.35rem;
+		border-bottom: 1px solid var(--color-tan);
+	}
+
+	.display {
+		background: var(--color-display);
+		border: 2px solid var(--color-brown);
+		padding: 0.5rem 0.75rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.display-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-family: var(--font-mono);
+		color: var(--color-display-text);
+		font-size: 0.8rem;
+	}
+
+	.display-row.secondary {
+		font-size: 0.65rem;
+		color: var(--color-tan);
 		margin-top: 0.25rem;
 	}
 
-	.progress-bar {
+	.track-num {
+		opacity: 0.6;
+	}
+
+	.track-title {
+		font-weight: 500;
+	}
+
+	.progress {
 		height: 4px;
-		background: var(--color-olive);
-		margin-bottom: 1rem;
+		background: var(--color-tan);
+		margin-bottom: 0.5rem;
 	}
 
 	.progress-fill {
 		height: 100%;
-		background: linear-gradient(90deg, var(--color-orange) 0%, var(--color-coral) 100%);
+		background: var(--color-amber);
 		transition: width 0.3s ease;
 	}
 
 	.controls {
 		display: flex;
-		align-items: center;
 		justify-content: center;
-		gap: 0.75rem;
-		margin-bottom: 1rem;
-	}
-
-	.control-btn {
-		width: 32px;
-		height: 32px;
-		border: 1px solid var(--color-sage);
-		background: var(--color-olive);
-		color: var(--color-peach-light);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: all 0.15s ease;
-	}
-
-	.control-btn:hover {
-		border-color: var(--color-orange);
-		background: var(--color-olive-light);
-	}
-
-	.play-btn {
-		width: 44px;
-		height: 44px;
-		background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-coral) 100%);
-		color: white;
-		border: none;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 1.25rem;
-		cursor: pointer;
-		transition: all 0.15s ease;
-	}
-
-	.play-btn:hover {
-		background: linear-gradient(135deg, var(--color-coral) 0%, var(--color-orange) 100%);
-	}
-
-	.playlist {
-		border-top: 1px solid var(--color-olive);
-		padding-top: 0.75rem;
-	}
-
-	.playlist-label {
-		font-size: 0.7rem;
-		color: var(--color-sage);
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		gap: 0.35rem;
 		margin-bottom: 0.5rem;
-		font-family: var(--font-mono);
 	}
 
-	.track-item {
+	.ctrl-btn {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		padding: 0.4rem 0.75rem;
+		background: var(--color-cream);
+		border: 2px solid var(--color-tan-dark);
+		color: var(--color-brown-dark);
+		cursor: pointer;
+		box-shadow: 
+			inset 1px 1px 0 var(--color-beige-light),
+			inset -1px -1px 0 var(--color-beige-dark);
+	}
+
+	.ctrl-btn:hover {
+		background: var(--color-amber);
+		border-color: var(--color-amber-dim);
+	}
+
+	.ctrl-btn:active {
+		box-shadow: inset 1px 1px 2px rgba(0,0,0,0.15);
+	}
+
+	.ctrl-btn.play {
+		padding: 0.4rem 1rem;
+	}
+
+	.tracklist {
+		background: var(--color-cream);
+		border: 1px solid var(--color-tan);
+	}
+
+	.track {
 		width: 100%;
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		padding: 0.4rem 0.5rem;
-		font-size: 0.8rem;
+		padding: 0.35rem 0.5rem;
+		font-size: 0.75rem;
+		font-family: var(--font-mono);
 		cursor: pointer;
-		transition: all 0.15s ease;
-		color: var(--color-peach-dark);
+		color: var(--color-brown);
 		background: transparent;
 		border: none;
-		border-left: 2px solid transparent;
+		border-bottom: 1px solid var(--color-beige);
 		text-align: left;
 	}
 
-	.track-item:hover {
-		background: rgba(0, 0, 0, 0.2);
-		color: var(--color-peach-light);
-		border-left-color: var(--color-orange);
+	.track:last-child {
+		border-bottom: none;
 	}
 
-	.track-item.active {
-		background: rgba(0, 0, 0, 0.2);
-		color: var(--color-orange);
-		border-left-color: var(--color-orange);
+	.track:hover {
+		background: var(--color-beige-light);
 	}
 
-	.track-icon {
-		width: 16px;
-		text-align: center;
-		flex-shrink: 0;
+	.track.active {
+		background: var(--color-beige);
+		color: var(--color-amber-dim);
 	}
 
-	.track-title {
+	.num {
+		color: var(--color-tan-dark);
+		font-size: 0.65rem;
+	}
+
+	.track.active .num {
+		color: var(--color-amber);
+	}
+
+	.name {
 		flex: 1;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 
-	.track-duration {
-		font-size: 0.7rem;
-		color: var(--color-sage);
-		font-family: var(--font-mono);
-		flex-shrink: 0;
+	.no-file {
+		color: var(--color-tan-dark);
+		font-size: 0.65rem;
+		opacity: 0.5;
+	}
+
+	.ctrl-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.ctrl-btn:disabled:hover {
+		background: var(--color-cream);
+		border-color: var(--color-tan-dark);
 	}
 </style>

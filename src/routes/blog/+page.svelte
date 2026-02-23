@@ -12,94 +12,131 @@
 </script>
 
 <svelte:head>
-	<title>blog · {site.name}</title>
-	<meta name="description" content="thoughts, musings, and updates" />
+	<title>blog - {site.name}</title>
 </svelte:head>
 
 <div class="site-container font-body">
 	<!-- Header -->
 	<header class="site-header">
-		<div class="flex items-center justify-between">
-			<a href="/" class="text-coral hover:underline font-mono text-sm">← {site.name}</a>
-			<span class="text-sage-dark text-xs font-mono">{data.posts.length} posts</span>
+		<div>
+			<a href="/" class="text-rust hover:text-amber text-sm">← back</a>
 		</div>
+		<div class="display-panel">{data.posts.length} posts</div>
 	</header>
 
 	<!-- Sidebar -->
 	<nav class="site-nav">
-		<div class="nav-title">filter by tag</div>
+		<div class="nav-title">filter</div>
 		<button
 			onclick={() => (selectedTag = null)}
-			class="block w-full text-left px-2 py-1 text-sm transition-all border-l-2
-				{selectedTag === null 
-					? 'text-coral border-coral bg-peach' 
-					: 'text-olive-dark border-transparent hover:text-coral hover:bg-peach'}"
+			class="nav-btn"
+			class:active={selectedTag === null}
 		>
-			all posts
+			all
 		</button>
 		{#each data.tags as tag}
 			<button
 				onclick={() => (selectedTag = tag)}
-				class="block w-full text-left px-2 py-1 text-sm transition-all border-l-2
-					{selectedTag === tag 
-						? 'text-coral border-coral bg-peach' 
-						: 'text-olive-dark border-transparent hover:text-coral hover:bg-peach'}"
+				class="nav-btn"
+				class:active={selectedTag === tag}
 			>
 				{tag}
 			</button>
 		{/each}
+
+		<div class="nav-title">navigate</div>
+		<a href="/">home</a>
+		<a href="#webrings">webrings</a>
 	</nav>
 
-	<!-- Main Content -->
+	<!-- Main -->
 	<main class="site-main">
 		<section class="section full">
 			<h2>blog</h2>
-			<p class="mb-4">thoughts, notes, and whatever else.</p>
+			<div class="section-content">
+				<p>things i've written.</p>
+			</div>
 		</section>
 
 		{#each filteredPosts as post}
-			<a 
-				href="/blog/{post.slug}" 
-				class="section full hover:border-coral transition-colors group"
-			>
-				<div class="flex flex-col sm:flex-row sm:items-baseline gap-2">
-					<span class="text-sage-dark font-mono text-xs shrink-0">
-						{post.date}
-					</span>
-					<h3 class="text-olive group-hover:text-coral transition-colors font-normal">
-						{post.title}
-					</h3>
-				</div>
-				{#if post.excerpt}
-					<p class="mt-2 text-sm text-olive-dark line-clamp-2">{post.excerpt}</p>
-				{/if}
-				{#if post.tags.length > 0}
-					<div class="flex gap-2 mt-2">
+			<a href="/blog/{post.slug}" class="section full post-card">
+				<h2>{post.title}</h2>
+				<div class="section-content">
+					<div class="flex items-center gap-2 mb-2">
+						<span class="display-panel">{post.date}</span>
 						{#each post.tags as tag}
-							<span class="text-xs text-sage-dark bg-sage-light px-2 py-0.5 rounded">
-								{tag}
-							</span>
+							<span class="tag">{tag}</span>
 						{/each}
 					</div>
-				{/if}
+					{#if post.excerpt}
+						<p>{post.excerpt}</p>
+					{/if}
+				</div>
 			</a>
 		{/each}
 
 		{#if filteredPosts.length === 0}
-			<section class="section full text-center">
-				<p class="text-olive-dark">no posts found with that tag.</p>
-				<button
-					onclick={() => (selectedTag = null)}
-					class="mt-3 text-coral hover:underline text-sm"
-				>
-					show all posts
-				</button>
+			<section class="section full">
+				<h2>no results</h2>
+				<div class="section-content">
+					<p>nothing found.</p>
+					<button onclick={() => (selectedTag = null)} class="btn mt-2">show all</button>
+				</div>
 			</section>
 		{/if}
 	</main>
 
 	<!-- Footer -->
 	<footer class="site-footer">
-		<a href="/">← back to home</a>
+		<a href="/">← home</a>
 	</footer>
 </div>
+
+<style>
+	.nav-btn {
+		display: block;
+		width: 100%;
+		padding: 0.4rem 0.75rem;
+		font-size: 0.8rem;
+		color: var(--color-brown);
+		text-decoration: none;
+		border: none;
+		background: transparent;
+		border-left: 2px solid transparent;
+		cursor: pointer;
+		text-align: left;
+		transition: all 0.1s ease;
+	}
+
+	.nav-btn:hover {
+		background: var(--color-cream);
+		border-left-color: var(--color-amber);
+	}
+
+	.nav-btn.active {
+		background: var(--color-cream);
+		border-left-color: var(--color-amber);
+		color: var(--color-amber-dim);
+	}
+
+	.post-card {
+		text-decoration: none;
+		transition: all 0.1s ease;
+	}
+
+	.post-card:hover {
+		border-color: var(--color-amber);
+	}
+
+	.post-card:hover h2 {
+		background: var(--color-amber);
+	}
+
+	.tag {
+		font-size: 0.65rem;
+		padding: 0.15rem 0.4rem;
+		background: var(--color-cream);
+		border: 1px solid var(--color-tan);
+		color: var(--color-brown-light);
+	}
+</style>

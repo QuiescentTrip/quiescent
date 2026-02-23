@@ -5,7 +5,7 @@
 
 export const site = {
 	name: 'quiescent',
-	tagline: 'a quiet corner of the web',
+	tagline: '--- quiet, still, or inactive',
 	author: 'quiescent',
 	description: 'personal website — music, thoughts, links',
 
