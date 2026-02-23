@@ -212,7 +212,7 @@
 				<!-- Top label area -->
 				<div class="cassette-top-label">
 					{#if title}
-						<span class="tape-title">{title.toUpperCase()}</span>
+						<span class="tape-title">{title.toLowerCase()}</span>
 					{/if}
 				</div>
 				
@@ -389,8 +389,8 @@
 
 	.tape-title {
 		font-family: var(--font-mono);
-		font-size: 0.6rem;
-		font-weight: bold;
+		font-size: 1rem;
+		font-weight: normal;
 		color: var(--color-brown-dark);
 		letter-spacing: 0.1em;
 	}
