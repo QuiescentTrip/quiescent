@@ -176,6 +176,14 @@
 			}
 		};
 	});
+
+	$effect(() => {
+		// When currentTrack changes, load the new audio source
+		currentTrack;
+		if (audioElement && track?.file) {
+			audioElement.load();
+		}
+	});
 </script>
 
 {#if tracks.length === 0}
