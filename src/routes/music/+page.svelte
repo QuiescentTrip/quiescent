@@ -19,13 +19,14 @@
 </svelte:head>
 
 <div class="music-page">
-	<header class="page-header">
-		<a href="/" class="back-link">← back</a>
-		<h1>music</h1>
-		<p class="tagline">tracks and sounds</p>
-	</header>
+	<div class="page-container">
+		<header class="page-header">
+			<a href="/" class="back-link">← back</a>
+			<h1>music</h1>
+			<p class="tagline">tracks and sounds</p>
+		</header>
 
-	<main class="page-content">
+		<main class="page-content">
 		{#if loading}
 			<div class="loading">Loading...</div>
 		{:else if folders.length === 0}
@@ -40,7 +41,8 @@
 				</div>
 			{/each}
 		{/if}
-	</main>
+		</main>
+	</div>
 </div>
 
 <style>
@@ -50,8 +52,19 @@
 		padding: 2rem 1rem;
 	}
 
+	.page-container {
+		background: var(--color-cream);
+		border: 3px solid var(--color-tan-dark);
+		box-shadow: 
+			inset 2px 2px 0 var(--color-cream),
+			inset -2px -2px 0 var(--color-beige-dark),
+			4px 4px 0 var(--color-brown-light);
+	}
+
 	.page-header {
-		margin-bottom: 1.5rem;
+		background: var(--color-beige);
+		border-bottom: 2px solid var(--color-tan-dark);
+		padding: 1rem;
 	}
 
 	.back-link {
@@ -82,8 +95,6 @@
 	}
 
 	.page-content {
-		background: var(--color-cream);
-		border: 2px solid var(--color-tan-dark);
 		padding: 1rem;
 	}
 
