@@ -54,12 +54,22 @@
 	<nav class="site-nav">
 		<div class="nav-title">navigate</div>
 		{#each navLinks as link}
-			<a href={link.href}>{link.name}</a>
+			<a href={link.href}>
+				{link.name}
+				<span class="nav-stripe-1"></span>
+				<span class="nav-stripe-2"></span>
+				<span class="nav-stripe-3"></span>
+			</a>
 		{/each}
 
 		<div class="nav-title">elsewhere</div>
 		{#each links.slice(0, 3) as link}
-			<a href={link.url} target="_blank">{link.name}</a>
+			<a href={link.url} target="_blank">
+				{link.name}
+				<span class="nav-stripe-1"></span>
+				<span class="nav-stripe-2"></span>
+				<span class="nav-stripe-3"></span>
+			</a>
 		{/each}
 
 		<div class="status-row">
