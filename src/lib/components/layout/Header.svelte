@@ -3,36 +3,29 @@
 
 	type Props = {
 		showNav?: boolean;
+		minimal?: boolean;
 	};
 
-	let { showNav = true }: Props = $props();
+	let { showNav = true, minimal = false }: Props = $props();
 
 	const navLinks = [
-		{ name: 'Home', href: '/' },
-		{ name: 'Blog', href: '/blog' },
-		{ name: 'Music', href: '/#music' },
-		{ name: 'About', href: '/#about' },
-		{ name: 'Guestbook', href: '/#guestbook' },
-		{ name: 'Links', href: '/#links' }
+		{ name: 'home', href: '/' },
+		{ name: 'blog', href: '/blog' },
+		{ name: 'music', href: '/#music' },
+		{ name: 'about', href: '/#about' }
 	];
 </script>
 
-<header class="retro-box rounded-lg p-6 mb-6 text-center">
-	<h1 class="font-display text-4xl md:text-5xl text-olive mb-2">
-		{site.name}
-	</h1>
-	<p class="text-olive-dark">{site.tagline}</p>
-
-	{#if showNav}
-		<nav class="flex flex-wrap justify-center gap-2 mt-4">
-			{#each navLinks as link}
-				<a
-					href={link.href}
-					class="px-4 py-2 bg-sage text-olive-dark rounded-full text-sm font-semibold hover:bg-orange hover:text-white transition-colors"
-				>
-					{link.name}
-				</a>
-			{/each}
-		</nav>
-	{/if}
-</header>
+{#if minimal}
+	<!-- Minimal header for sub-pages -->
+	<header class="site-header">
+		<a href="/" class="text-accent hover:underline font-mono text-sm">← back to {site.name}</a>
+	</header>
+{:else}
+	<!-- Full header for home -->
+	<header class="site-header">
+		<div class="accent-bar mb-3"></div>
+		<h1>{site.name}</h1>
+		<p class="tagline">{site.tagline}</p>
+	</header>
+{/if}

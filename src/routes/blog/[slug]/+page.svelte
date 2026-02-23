@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { PageHeader } from '$lib/components/layout';
-	import { Tag, Button } from '$lib/components/ui';
+	import { site } from '$lib/config';
 	import { MarkdownRenderer } from '$lib/components/features';
 	import type { PageData } from './$types';
 
@@ -8,82 +7,178 @@
 </script>
 
 <svelte:head>
-	<title>{data.meta.title} ✿ Fabian's Blog</title>
+	<title>{data.meta.title} · {site.name}</title>
 	<meta name="description" content={data.meta.excerpt} />
 </svelte:head>
 
-<div class="min-h-screen bg-peach font-body">
-	<PageHeader backLink="/blog" backText="← back to blog" title="" />
+<div class="site-container font-body">
+	<!-- Header -->
+	<header class="site-header">
+		<div class="flex items-center justify-between">
+			<a href="/blog" class="text-coral hover:underline font-mono text-sm">← blog</a>
+			<span class="text-sage-dark text-xs font-mono">{data.meta.date}</span>
+		</div>
+	</header>
 
-	<main class="max-w-3xl mx-auto px-4 py-8">
-		<article class="retro-box rounded-lg p-6 md:p-8">
-			<!-- Header -->
-			<header class="mb-6 pb-6 border-b-2 border-sage/30">
-				<h1 class="font-display text-2xl md:text-4xl text-olive mb-3">{data.meta.title}</h1>
-				<div class="flex flex-wrap items-center gap-3 text-sm">
-					<span class="text-sage-dark font-mono">{data.meta.date}</span>
-					<span class="text-sage-dark">·</span>
+	<!-- Sidebar -->
+	<aside class="site-nav">
+		<div class="nav-title">this post</div>
+		<div class="text-xs text-olive-dark px-2 py-1 space-y-2">
+			<div>
+				<span class="text-sage-dark">date:</span><br/>
+				{data.meta.date}
+			</div>
+			{#if data.meta.tags.length > 0}
+				<div>
+					<span class="text-sage-dark">tags:</span><br/>
 					{#each data.meta.tags as tag}
-						<Tag {tag} />
+						<span class="inline-block bg-sage-light px-1.5 py-0.5 rounded text-xs mt-1 mr-1">
+							{tag}
+						</span>
 					{/each}
 				</div>
-			</header>
+			{/if}
+		</div>
 
-			<!-- Content -->
+		<div class="nav-title mt-4">navigation</div>
+		<a href="/">home</a>
+		<a href="/blog">all posts</a>
+		<a href="/#guestbook">guestbook</a>
+	</aside>
+
+	<!-- Main Content -->
+	<main class="site-main">
+		<article class="section full">
+			<h1 class="text-xl font-display text-olive mb-4 pb-3 border-b border-sage">
+				{data.meta.title}
+			</h1>
+
 			{#if data.isNotion && data.content}
-				<MarkdownRenderer content={data.content} />
+				<div class="prose-content">
+					<MarkdownRenderer content={data.content} />
+				</div>
 			{:else}
-				<div
-					class="prose-custom
-						[&>h1]:font-display [&>h1]:text-2xl [&>h1]:text-olive [&>h1]:mt-6 [&>h1]:mb-3
-						[&>h2]:font-display [&>h2]:text-xl [&>h2]:text-olive [&>h2]:mt-6 [&>h2]:mb-3
-						[&>h3]:font-display [&>h3]:text-lg [&>h3]:text-olive [&>h3]:mt-5 [&>h3]:mb-2
-						[&>p]:text-olive-dark [&>p]:leading-relaxed [&>p]:my-3
-						[&>ul]:list-disc [&>ul]:list-inside [&>ul]:text-olive-dark [&>ul]:my-3 [&>ul]:space-y-1
-						[&>ol]:list-decimal [&>ol]:list-inside [&>ol]:text-olive-dark [&>ol]:my-3 [&>ol]:space-y-1
-						[&>blockquote]:border-l-4 [&>blockquote]:border-sage [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-olive-dark [&>blockquote]:my-3
-						[&>pre]:bg-olive-dark [&>pre]:text-peach-light [&>pre]:p-4 [&>pre]:rounded-lg [&>pre]:overflow-x-auto [&>pre]:my-4
-						[&_code]:bg-sage/30 [&_code]:px-1 [&_code]:rounded [&_code]:text-sm [&_code]:font-mono
-						[&>pre_code]:bg-transparent [&>pre_code]:p-0
-						[&>hr]:my-6 [&>hr]:border-sage/50
-						[&_a]:text-coral [&_a]:hover:underline
-						[&_strong]:font-semibold"
-				>
+				<div class="prose-content">
 					<p class="text-olive-dark">{data.meta.excerpt}</p>
-					<p class="text-sage-dark italic mt-4">
-						This post uses local markdown. Set up Notion to enable full content rendering.
+					<p class="text-sage-dark italic mt-4 text-sm">
+						set up notion to enable full content rendering.
 					</p>
 				</div>
 			{/if}
-
-			<!-- Footer -->
-			<footer
-				class="mt-8 pt-6 border-t-2 border-sage/30 flex flex-col sm:flex-row items-center justify-between gap-4"
-			>
-				<Button href="/blog" variant="ghost">← More posts</Button>
-				<Button href="/#guestbook" size="sm">Leave a comment ✨</Button>
-			</footer>
 		</article>
 
 		<!-- Related Posts -->
 		{#if data.relatedPosts.length > 0}
-			<section class="mt-8">
-				<h2 class="font-display text-xl text-olive mb-4">More posts</h2>
-				<div class="grid sm:grid-cols-2 gap-4">
+			<section class="section full">
+				<h2>more posts</h2>
+				<div class="space-y-2 mt-3">
 					{#each data.relatedPosts as post}
 						<a
 							href="/blog/{post.slug}"
-							class="retro-box rounded-lg p-4 hover:shadow-lg transition-all group"
+							class="block p-3 bg-peach border-2 border-sage hover:border-coral transition-colors"
 						>
-							<h3 class="font-display text-olive group-hover:text-coral transition-colors">
-								{post.title}
-							</h3>
-							<p class="text-olive-dark text-sm mt-1 line-clamp-2">{post.excerpt}</p>
-							<span class="text-xs text-sage-dark font-mono mt-2 block">{post.date}</span>
+							<span class="text-olive hover:text-coral">{post.title}</span>
+							<span class="text-sage-dark text-xs font-mono ml-2">{post.date}</span>
 						</a>
 					{/each}
 				</div>
 			</section>
 		{/if}
 	</main>
+
+	<!-- Footer -->
+	<footer class="site-footer">
+		<a href="/blog">← back to blog</a>
+		<span class="mx-2">·</span>
+		<a href="/">home</a>
+	</footer>
 </div>
+
+<style>
+	.prose-content {
+		font-size: 0.9rem;
+		line-height: 1.7;
+		color: var(--color-olive-dark);
+	}
+
+	.prose-content :global(h2) {
+		font-size: 1.1rem;
+		color: var(--color-coral);
+		margin-top: 1.5rem;
+		margin-bottom: 0.75rem;
+		font-family: var(--font-mono);
+	}
+
+	.prose-content :global(h3) {
+		font-size: 1rem;
+		color: var(--color-olive);
+		margin-top: 1.25rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.prose-content :global(p) {
+		margin: 0.75rem 0;
+	}
+
+	.prose-content :global(ul),
+	.prose-content :global(ol) {
+		padding-left: 1.5rem;
+		margin: 0.75rem 0;
+	}
+
+	.prose-content :global(li) {
+		margin: 0.25rem 0;
+	}
+
+	.prose-content :global(blockquote) {
+		border-left: 3px solid var(--color-sage);
+		padding-left: 1rem;
+		margin: 1rem 0;
+		color: var(--color-sage-dark);
+		font-style: italic;
+	}
+
+	.prose-content :global(pre) {
+		background: var(--color-olive-dark);
+		color: var(--color-peach-light);
+		padding: 1rem;
+		border-radius: 4px;
+		overflow-x: auto;
+		margin: 1rem 0;
+		font-size: 0.85rem;
+	}
+
+	.prose-content :global(code) {
+		font-family: var(--font-mono);
+		font-size: 0.85em;
+		background: var(--color-sage-light);
+		padding: 0.15em 0.4em;
+		border-radius: 3px;
+	}
+
+	.prose-content :global(pre code) {
+		background: none;
+		padding: 0;
+		color: var(--color-peach-light);
+	}
+
+	.prose-content :global(a) {
+		color: var(--color-coral);
+	}
+
+	.prose-content :global(a:hover) {
+		text-decoration: underline;
+	}
+
+	.prose-content :global(hr) {
+		border: none;
+		border-top: 1px dashed var(--color-sage);
+		margin: 2rem 0;
+	}
+
+	.prose-content :global(img) {
+		max-width: 100%;
+		border: 2px solid var(--color-sage);
+		margin: 1rem 0;
+	}
+</style>

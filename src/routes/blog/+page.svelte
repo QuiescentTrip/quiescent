@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { PageHeader } from '$lib/components/layout';
-	import { Tag, Card } from '$lib/components/ui';
-	import { BlogCard } from '$lib/components/features';
+	import { site } from '$lib/config';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -9,59 +7,99 @@
 	let selectedTag = $state<string | null>(null);
 
 	const filteredPosts = $derived(
-		selectedTag ? data.posts.filter((p) => p.tags.includes(selectedTag)) : data.posts
+		selectedTag ? data.posts.filter((p) => p.tags.includes(selectedTag as string)) : data.posts
 	);
 </script>
 
 <svelte:head>
-	<title>Blog ✿ Fabian's Corner</title>
-	<meta name="description" content="Thoughts, musings, and updates" />
+	<title>blog · {site.name}</title>
+	<meta name="description" content="thoughts, musings, and updates" />
 </svelte:head>
 
-<div class="min-h-screen bg-peach font-body">
-	<PageHeader title="📝 Blog" subtitle="thoughts, musings, and updates" backLink="/" />
-
-	<main class="max-w-4xl mx-auto px-4 py-8">
-		<!-- Tag Filter -->
-		<Card class="p-4 mb-6">
-			<div class="flex flex-wrap items-center gap-2">
-				<span class="text-olive-dark text-sm">Filter:</span>
-				<button
-					onclick={() => (selectedTag = null)}
-					class="px-3 py-1 rounded-full text-sm transition-all {selectedTag === null
-						? 'bg-olive text-peach'
-						: 'bg-sage/30 text-olive-dark hover:bg-sage'}"
-				>
-					all
-				</button>
-				{#each data.tags as tag}
-					<button
-						onclick={() => (selectedTag = tag)}
-						class="transition-all hover:scale-105"
-					>
-						<Tag {tag} size="md" />
-					</button>
-				{/each}
-			</div>
-		</Card>
-
-		<!-- Posts -->
-		<div class="space-y-4">
-			{#each filteredPosts as post}
-				<BlogCard {post} />
-			{/each}
+<div class="site-container font-body">
+	<!-- Header -->
+	<header class="site-header">
+		<div class="flex items-center justify-between">
+			<a href="/" class="text-coral hover:underline font-mono text-sm">← {site.name}</a>
+			<span class="text-sage-dark text-xs font-mono">{data.posts.length} posts</span>
 		</div>
+	</header>
+
+	<!-- Sidebar -->
+	<nav class="site-nav">
+		<div class="nav-title">filter by tag</div>
+		<button
+			onclick={() => (selectedTag = null)}
+			class="block w-full text-left px-2 py-1 text-sm transition-all border-l-2
+				{selectedTag === null 
+					? 'text-coral border-coral bg-peach' 
+					: 'text-olive-dark border-transparent hover:text-coral hover:bg-peach'}"
+		>
+			all posts
+		</button>
+		{#each data.tags as tag}
+			<button
+				onclick={() => (selectedTag = tag)}
+				class="block w-full text-left px-2 py-1 text-sm transition-all border-l-2
+					{selectedTag === tag 
+						? 'text-coral border-coral bg-peach' 
+						: 'text-olive-dark border-transparent hover:text-coral hover:bg-peach'}"
+			>
+				{tag}
+			</button>
+		{/each}
+	</nav>
+
+	<!-- Main Content -->
+	<main class="site-main">
+		<section class="section full">
+			<h2>blog</h2>
+			<p class="mb-4">thoughts, notes, and whatever else.</p>
+		</section>
+
+		{#each filteredPosts as post}
+			<a 
+				href="/blog/{post.slug}" 
+				class="section full hover:border-coral transition-colors group"
+			>
+				<div class="flex flex-col sm:flex-row sm:items-baseline gap-2">
+					<span class="text-sage-dark font-mono text-xs shrink-0">
+						{post.date}
+					</span>
+					<h3 class="text-olive group-hover:text-coral transition-colors font-normal">
+						{post.title}
+					</h3>
+				</div>
+				{#if post.excerpt}
+					<p class="mt-2 text-sm text-olive-dark line-clamp-2">{post.excerpt}</p>
+				{/if}
+				{#if post.tags.length > 0}
+					<div class="flex gap-2 mt-2">
+						{#each post.tags as tag}
+							<span class="text-xs text-sage-dark bg-sage-light px-2 py-0.5 rounded">
+								{tag}
+							</span>
+						{/each}
+					</div>
+				{/if}
+			</a>
+		{/each}
 
 		{#if filteredPosts.length === 0}
-			<Card class="p-8 text-center">
-				<p class="text-olive-dark text-lg">No posts found with that tag!</p>
+			<section class="section full text-center">
+				<p class="text-olive-dark">no posts found with that tag.</p>
 				<button
 					onclick={() => (selectedTag = null)}
-					class="mt-4 px-4 py-2 bg-orange text-white rounded-full hover:bg-coral transition-colors"
+					class="mt-3 text-coral hover:underline text-sm"
 				>
-					Show all posts
+					show all posts
 				</button>
-			</Card>
+			</section>
 		{/if}
 	</main>
+
+	<!-- Footer -->
+	<footer class="site-footer">
+		<a href="/">← back to home</a>
+	</footer>
 </div>

@@ -7,12 +7,6 @@
 
 	const track = $derived(tracks[currentTrack]);
 
-	function play() {
-		isPlaying = true;
-	}
-	function pause() {
-		isPlaying = false;
-	}
 	function toggle() {
 		isPlaying = !isPlaying;
 	}
@@ -27,6 +21,7 @@
 	function select(index: number) {
 		currentTrack = index;
 		progress = 0;
+		isPlaying = true;
 	}
 
 	$effect(() => {
@@ -39,31 +34,26 @@
 	});
 </script>
 
-<div class="music-player p-4 text-peach-light">
+<div class="player">
 	<!-- Now Playing -->
-	<div class="flex gap-4 mb-4">
-		<div
-			class="w-20 h-20 bg-gradient-to-br from-coral to-orange rounded-lg flex items-center justify-center text-4xl shadow-lg shrink-0"
-		>
+	<div class="now-playing">
+		<div class="album-art">
 			{isPlaying ? '▶' : '♪'}
 		</div>
-		<div class="min-w-0 flex-1">
-			<p class="font-semibold text-lg truncate">{track.title}</p>
-			<p class="text-peach-dark text-sm truncate">{track.artist}</p>
-			<p class="text-peach-dark/60 text-xs mt-1">{track.duration}</p>
+		<div class="track-info">
+			<p class="title">{track.title}</p>
+			<p class="artist">{track.artist}</p>
+			<p class="duration">{track.duration}</p>
 		</div>
 	</div>
 
 	<!-- Progress -->
-	<div class="h-2 bg-olive-dark rounded-full overflow-hidden mb-4">
-		<div
-			class="h-full bg-gradient-to-r from-orange to-coral transition-all"
-			style="width: {progress}%"
-		></div>
+	<div class="progress-bar">
+		<div class="progress-fill" style="width: {progress}%"></div>
 	</div>
 
 	<!-- Controls -->
-	<div class="flex items-center justify-center gap-4">
+	<div class="controls">
 		<button onclick={prev} class="control-btn" aria-label="Previous">⏮</button>
 		<button onclick={toggle} class="play-btn" aria-label={isPlaying ? 'Pause' : 'Play'}>
 			{isPlaying ? '⏸' : '▶'}
@@ -72,69 +62,192 @@
 	</div>
 
 	<!-- Playlist -->
-	<div class="mt-4 space-y-1">
-		<p class="text-xs text-peach-dark mb-2">Playlist:</p>
+	<div class="playlist">
+		<p class="playlist-label">playlist</p>
 		{#each tracks as t, i}
 			<button
 				onclick={() => select(i)}
 				class="track-item"
 				class:active={i === currentTrack}
 			>
-				<span class="mr-2">{i === currentTrack && isPlaying ? '▶' : '♪'}</span>
-				<span class="truncate flex-1 text-left">{t.title}</span>
-				<span class="text-xs opacity-60 ml-2">{t.duration}</span>
+				<span class="track-icon">{i === currentTrack && isPlaying ? '▶' : '♪'}</span>
+				<span class="track-title">{t.title}</span>
+				<span class="track-duration">{t.duration}</span>
 			</button>
 		{/each}
 	</div>
 </div>
 
 <style>
-	.control-btn {
-		width: 2.5rem;
-		height: 2.5rem;
-		border-radius: 9999px;
+	.player {
 		background: var(--color-olive-dark);
+		border: 2px solid var(--color-sage);
+		padding: 1rem;
+		color: var(--color-peach-light);
+	}
+
+	.now-playing {
 		display: flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: background 0.2s;
+		gap: 1rem;
+		margin-bottom: 1rem;
 	}
-	.control-btn:hover {
-		background: var(--color-sage-dark);
-	}
-	.play-btn {
-		width: 3.5rem;
-		height: 3.5rem;
-		border-radius: 9999px;
-		background: linear-gradient(to bottom right, var(--color-orange), var(--color-coral));
+
+	.album-art {
+		width: 60px;
+		height: 60px;
+		background: linear-gradient(135deg, var(--color-coral) 0%, var(--color-orange) 100%);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		font-size: 1.5rem;
+		color: white;
+		flex-shrink: 0;
+	}
+
+	.track-info {
+		min-width: 0;
+		flex: 1;
+	}
+
+	.title {
+		font-size: 0.9rem;
+		color: var(--color-peach-light);
+		font-weight: 500;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.artist {
+		font-size: 0.8rem;
+		color: var(--color-peach-dark);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.duration {
+		font-size: 0.7rem;
+		color: var(--color-sage);
+		font-family: var(--font-mono);
+		margin-top: 0.25rem;
+	}
+
+	.progress-bar {
+		height: 4px;
+		background: var(--color-olive);
+		margin-bottom: 1rem;
+	}
+
+	.progress-fill {
+		height: 100%;
+		background: linear-gradient(90deg, var(--color-orange) 0%, var(--color-coral) 100%);
+		transition: width 0.3s ease;
+	}
+
+	.controls {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.75rem;
+		margin-bottom: 1rem;
+	}
+
+	.control-btn {
+		width: 32px;
+		height: 32px;
+		border: 1px solid var(--color-sage);
+		background: var(--color-olive);
+		color: var(--color-peach-light);
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		cursor: pointer;
-		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-		transition: all 0.2s;
+		transition: all 0.15s ease;
 	}
+
+	.control-btn:hover {
+		border-color: var(--color-orange);
+		background: var(--color-olive-light);
+	}
+
+	.play-btn {
+		width: 44px;
+		height: 44px;
+		background: linear-gradient(135deg, var(--color-orange) 0%, var(--color-coral) 100%);
+		color: white;
+		border: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.25rem;
+		cursor: pointer;
+		transition: all 0.15s ease;
+	}
+
 	.play-btn:hover {
-		background: linear-gradient(to bottom right, var(--color-coral), var(--color-orange));
+		background: linear-gradient(135deg, var(--color-coral) 0%, var(--color-orange) 100%);
 	}
+
+	.playlist {
+		border-top: 1px solid var(--color-olive);
+		padding-top: 0.75rem;
+	}
+
+	.playlist-label {
+		font-size: 0.7rem;
+		color: var(--color-sage);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		margin-bottom: 0.5rem;
+		font-family: var(--font-mono);
+	}
+
 	.track-item {
 		width: 100%;
 		display: flex;
 		align-items: center;
-		padding: 0.5rem 0.75rem;
-		border-radius: 0.25rem;
-		font-size: 0.875rem;
+		gap: 0.5rem;
+		padding: 0.4rem 0.5rem;
+		font-size: 0.8rem;
 		cursor: pointer;
-		transition: background 0.2s;
+		transition: all 0.15s ease;
 		color: var(--color-peach-dark);
+		background: transparent;
+		border: none;
+		border-left: 2px solid transparent;
+		text-align: left;
 	}
+
 	.track-item:hover {
 		background: rgba(0, 0, 0, 0.2);
-	}
-	.track-item.active {
-		background: rgba(var(--color-orange), 0.3);
 		color: var(--color-peach-light);
+		border-left-color: var(--color-orange);
+	}
+
+	.track-item.active {
+		background: rgba(0, 0, 0, 0.2);
+		color: var(--color-orange);
+		border-left-color: var(--color-orange);
+	}
+
+	.track-icon {
+		width: 16px;
+		text-align: center;
+		flex-shrink: 0;
+	}
+
+	.track-title {
+		flex: 1;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.track-duration {
+		font-size: 0.7rem;
+		color: var(--color-sage);
+		font-family: var(--font-mono);
+		flex-shrink: 0;
 	}
 </style>

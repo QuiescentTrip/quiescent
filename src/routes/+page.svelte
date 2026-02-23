@@ -1,22 +1,18 @@
 <script lang="ts">
-	import { Header, Footer, Sidebar } from '$lib/components/layout';
-	import { Section } from '$lib/components/ui';
-	import {
-		MusicPlayer,
-		NowPlaying,
-		UpdatesFeed,
-		SocialLinks,
-		CurrentStatus,
-		Interests,
-		Guestbook,
-		Webrings,
-		BlogPreview,
-		Badges
-	} from '$lib/components/features';
-	import { site } from '$lib/config';
+	import { site, now, updates } from '$lib/config';
+	import { MusicPlayer } from '$lib/components/features';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	const navLinks = [
+		{ name: 'home', href: '/' },
+		{ name: 'blog', href: '/blog' },
+		{ name: 'music', href: '#music' },
+		{ name: 'about', href: '#about' },
+		{ name: 'guestbook', href: '#guestbook' },
+		{ name: 'links', href: '#links' }
+	];
 </script>
 
 <svelte:head>
@@ -24,69 +20,194 @@
 	<meta name="description" content={site.description} />
 </svelte:head>
 
-<div class="min-h-screen bg-peach font-body">
-	<div class="max-w-5xl mx-auto px-4 py-6">
-		<Header />
+<div class="site-container font-body">
+	<!-- Header -->
+	<header class="site-header">
+		<div class="accent-bar mb-3"></div>
+		<h1>{site.name}</h1>
+		<p class="tagline">{site.tagline}</p>
+	</header>
 
-		<div class="grid lg:grid-cols-3 gap-6">
-			<!-- Main Content -->
-			<div class="lg:col-span-2 space-y-6">
-				<!-- Welcome -->
-				<Section>
-					<div class="flex flex-col md:flex-row items-center gap-6">
-						<div
-							class="w-32 h-32 rounded-full bg-gradient-to-br from-orange to-coral flex items-center justify-center text-white text-5xl font-display shadow-lg"
-						>
-							FT
-						</div>
-						<div class="text-center md:text-left">
-							<h2 class="font-display text-2xl text-olive mb-2">Welcome!</h2>
-							<p class="text-olive-dark leading-relaxed">
-								Hey there! I'm <strong>{site.author}</strong>. This is my little corner of the
-								internet where I share my music, thoughts, and things I love. Make yourself at
-								home!
-							</p>
-						</div>
-					</div>
-				</Section>
+	<!-- Navigation -->
+	<nav class="site-nav">
+		<div class="nav-title">navigation</div>
+		{#each navLinks as link}
+			<a href={link.href}>{link.name}</a>
+		{/each}
 
-				<!-- Music -->
-				<Section title="My Music" icon="🎵" id="music">
-					<MusicPlayer />
-				</Section>
-
-				<!-- Blog -->
-				{#snippet blogAction()}
-					<a href="/blog" class="text-coral hover:text-coral-dark text-sm font-semibold">
-						view all →
-					</a>
-				{/snippet}
-				<Section title="Latest Posts" icon="📝" action={blogAction}>
-					<BlogPreview posts={data.recentPosts} />
-				</Section>
-
-				<!-- About -->
-				<Section title="About Me" icon="🎨" id="about">
-					<div class="grid md:grid-cols-2 gap-4">
-						<Interests />
-						<CurrentStatus />
-					</div>
-				</Section>
-
-				<!-- Guestbook -->
-				<Guestbook />
-			</div>
-
-			<!-- Sidebar -->
-			<Sidebar>
-				<UpdatesFeed />
-				<NowPlaying />
-				<SocialLinks />
-				<Badges />
-				<Webrings />
-			</Sidebar>
+		<div class="nav-title mt-4">status</div>
+		<div class="text-xs text-olive-dark px-2 py-1">
+			<span class="now-indicator"></span>
+			<span class="ml-1">online</span>
 		</div>
 
-		<Footer />
-	</div>
+		<div class="mt-4 flex flex-wrap gap-1 px-1">
+			<img 
+				src="https://cyber.dabamos.de/88x31/neocities.gif" 
+				alt="neocities" 
+				class="badge-88x31"
+			/>
+			<img 
+				src="https://cyber.dabamos.de/88x31/www.gif" 
+				alt="www" 
+				class="badge-88x31"
+			/>
+		</div>
+	</nav>
+
+	<!-- Main Content -->
+	<main class="site-main">
+		<!-- Welcome -->
+		<section class="section full">
+			<h2>welcome</h2>
+			<p>
+				hey. i'm <strong class="text-coral">{site.author}</strong>. this is my personal website—
+				a quiet spot away from algorithms and feeds. i make music, write things, 
+				and collect interesting corners of the web.
+			</p>
+			<p>
+				no tracking. no ads. just a website, the way they used to be.
+			</p>
+		</section>
+
+		<!-- Updates -->
+		<section class="section half">
+			<h2>updates</h2>
+			{#each updates.slice(0, 5) as update}
+				<div class="update-entry">
+					<span class="date">{update.date}</span>
+					<span class="text">{update.text}</span>
+				</div>
+			{/each}
+		</section>
+
+		<!-- Currently -->
+		<section class="section half">
+			<h2>currently</h2>
+			<div class="status-item">
+				<span class="label">listening:</span>
+				<span class="value">{now.listening}</span>
+			</div>
+			<div class="status-item">
+				<span class="label">reading:</span>
+				<span class="value">{now.reading}</span>
+			</div>
+			<div class="status-item">
+				<span class="label">playing:</span>
+				<span class="value">{now.playing}</span>
+			</div>
+			<div class="status-item">
+				<span class="label">mood:</span>
+				<span class="value">{now.mood}</span>
+			</div>
+		</section>
+
+		<!-- Music -->
+		<section class="section full" id="music">
+			<h2>music</h2>
+			<p class="mb-3">i make electronic music sometimes. here's some of it:</p>
+			<MusicPlayer />
+		</section>
+
+		<!-- Blog -->
+		<section class="section full">
+			<h2>latest posts</h2>
+			{#if data.recentPosts && data.recentPosts.length > 0}
+				<div class="space-y-2">
+					{#each data.recentPosts.slice(0, 3) as post}
+						<div class="flex gap-3 items-baseline">
+							<span class="text-sage-dark font-mono text-xs shrink-0">
+								{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+							</span>
+							<a href="/blog/{post.slug}" class="text-sm hover:text-coral">
+								{post.title}
+							</a>
+						</div>
+					{/each}
+				</div>
+				<a href="/blog" class="inline-block mt-3 text-xs text-sage-dark hover:text-coral">
+					→ view all posts
+				</a>
+			{:else}
+				<p class="text-sage-dark text-sm italic">no posts yet. check back soon.</p>
+			{/if}
+		</section>
+
+		<!-- About -->
+		<section class="section half" id="about">
+			<h2>about</h2>
+			<p>
+				just someone who likes making things and putting them on the internet.
+				this site is hand-coded—no templates, no page builders.
+			</p>
+			<h3>interests</h3>
+			<ul>
+				<li>music production</li>
+				<li>web development</li>
+				<li>video games</li>
+				<li>reading</li>
+			</ul>
+		</section>
+
+		<!-- Why a Website -->
+		<section class="section half">
+			<h2>why make a website?</h2>
+			<p>
+				because social media is rented land. because algorithms optimize for 
+				engagement, not meaning. because i wanted a place that's <em>mine</em>.
+			</p>
+			<p class="text-xs text-sage-dark mt-2">
+				inspired by the indie web and everyone who refuses to let the internet become a mall.
+			</p>
+		</section>
+
+		<!-- Guestbook -->
+		<section class="section full" id="guestbook">
+			<h2>guestbook</h2>
+			<p>
+				say hi! leave a message if you stopped by.
+			</p>
+			<p class="text-xs text-sage-dark mt-2 italic">
+				(guestbook coming soon)
+			</p>
+		</section>
+
+		<!-- Links -->
+		<section class="section half" id="links">
+			<h2>find me</h2>
+			<div class="space-y-1">
+				{#each Object.entries(site.socials) as [name, url]}
+					<a 
+						href={url} 
+						class="block text-sm py-1 border-l-2 border-transparent pl-2 hover:border-coral hover:bg-peach transition-all"
+					>
+						{name}
+					</a>
+				{/each}
+			</div>
+		</section>
+
+		<!-- Webrings -->
+		<section class="section half">
+			<h2>webrings</h2>
+			<p class="text-sm text-sage-dark">
+				part of the indie web community.
+			</p>
+			<div class="mt-2 text-xs text-sage-dark">
+				← prev | <span class="text-coral">webring name</span> | next →
+			</div>
+		</section>
+	</main>
+
+	<!-- Footer -->
+	<footer class="site-footer">
+		<div class="accent-bar mb-3"></div>
+		<p>
+			made with care by {site.author} · est. {site.established} · 
+			<a href="https://neocities.org">hosted on {site.hosting}</a>
+		</p>
+		<p class="mt-1">
+			best viewed with curiosity
+		</p>
+	</footer>
 </div>

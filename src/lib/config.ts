@@ -22,16 +22,16 @@ export const site = {
 } as const;
 
 export const now = {
-	listening: 'your fav album',
-	reading: 'a good book',
-	playing: 'a fun game',
-	mood: 'cozy'
+	listening: 'ambient playlists',
+	reading: 'too many browser tabs',
+	playing: 'nothing rn',
+	mood: 'quiet'
 } as const;
 
 export const updates = [
-	{ date: '02/23', text: 'Site launched!' },
-	{ date: '02/22', text: 'Added music player' },
-	{ date: '02/21', text: 'Working on design' }
+	{ date: '02/23', text: 'redesigned the whole site' },
+	{ date: '02/22', text: 'added music player' },
+	{ date: '02/21', text: 'started building' }
 ] as const;
 
 export const webrings = [

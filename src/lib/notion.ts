@@ -1,6 +1,6 @@
 import { Client } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
-import { NOTION_API_KEY, NOTION_DATABASE_ID } from '$env/static/private';
+// import { NOTION_API_KEY, NOTION_DATABASE_ID } from '$env/static/private';
 import type { Post } from './types';
 
 const notion = new Client({ auth: NOTION_API_KEY });
