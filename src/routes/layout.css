@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-olive: #7c6a0a;
+	--color-olive-light: #9a8520;
+	--color-olive-dark: #5c4f08;
+
+	--color-sage: #babd8d;
+	--color-sage-light: #d1d4af;
+	--color-sage-dark: #9ea16b;
+
+	--color-peach: #ffdac6;
+	--color-peach-light: #ffede2;
+	--color-peach-dark: #ffcaad;
+
+	--color-orange: #fa9500;
+	--color-orange-light: #ffb033;
+	--color-orange-dark: #d67f00;
+
+	--color-coral: #eb6424;
+	--color-coral-light: #f08050;
+	--color-coral-dark: #c5511c;
+
+	--font-display: 'Georgia', serif;
+	--font-body: 'Segoe UI', system-ui, sans-serif;
+	--font-mono: 'Consolas', monospace;
+}
+
+.retro-box {
+	background: linear-gradient(135deg, var(--color-peach-light) 0%, var(--color-peach) 100%);
+	border: 3px double var(--color-olive);
+	box-shadow: 4px 4px 0 var(--color-sage-dark);
+}
+
+.music-player {
+	background: linear-gradient(180deg, var(--color-olive-dark) 0%, var(--color-olive) 100%);
+	border: 2px solid var(--color-sage);
+	border-radius: 8px;
+}
