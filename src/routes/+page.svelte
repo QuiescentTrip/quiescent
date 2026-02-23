@@ -22,14 +22,11 @@
 		'https://cyber.dabamos.de/88x31/www.gif',
 		'https://cyber.dabamos.de/88x31/notepad.gif',
 		'https://cyber.dabamos.de/88x31/nocookie.gif',
-		'https://cyber.dabamos.de/88x31/noai.gif'
+		'./images/buttons/blankbanshee.gif'
 	];
 
 	const links = [
-		{ name: 'Neocities', url: 'https://neocities.org' },
-		{ name: 'Sadgrl Online', url: 'https://sadgrl.online' },
-		{ name: '32bit.cafe', url: 'https://32bit.cafe' },
-		{ name: 'Melonland', url: 'https://melonland.net' }
+		{ name: 'Neocities', url: 'https://neocities.org' }
 	];
 </script>
 

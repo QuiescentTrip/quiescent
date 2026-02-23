@@ -97,6 +97,15 @@ export const GET: RequestHandler = async () => {
 			}
 		}
 
+		// Sort folders: "released" first, then alphabetically
+		folders.sort((a, b) => {
+			const aLower = a.name.toLowerCase();
+			const bLower = b.name.toLowerCase();
+			if (aLower === 'released') return -1;
+			if (bLower === 'released') return 1;
+			return aLower.localeCompare(bLower);
+		});
+
 		// Also get tracks in root music folder
 		const rootTracks = await getTracksFromDir(MUSIC_DIR, '/music');
 		if (rootTracks.length > 0) {
