@@ -113,7 +113,13 @@
 			<div class="section-content">
 				<div class="status-item">
 					<span class="label">listening:</span>
-					<span class="value">{now.listening}</span>
+				</div>
+				<div class="lastfm-widget">
+					<iframe 
+						src="https://petracoding.github.io/neocities/widgets/lastfm?center=0&marquee=0&font-family=Consolas&font-size=12px&color=%234a4238&username=quiescenttrip&swapPositions=0&delimiter=by&underline=0" 
+						frameborder="0" 
+						title="Last.Fm Status"
+					></iframe>
 				</div>
 				<div class="status-item">
 					<span class="label">reading:</span>
