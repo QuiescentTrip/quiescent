@@ -14,8 +14,7 @@ export type NotionPost = Post & {
 };
 
 export async function getNotionPosts(): Promise<NotionPost[]> {
-	if (!NOTION_API_KEY || !NOTION_DATABASE_ID) {
-		console.warn('Notion not configured, using local posts');
+	if (!NOTION_API_KEY || !NOTION_DATABASE_ID || NOTION_API_KEY.startsWith('secret_123') || NOTION_DATABASE_ID === '1234567890') {
 		return [];
 	}
 
@@ -62,7 +61,7 @@ export async function getNotionPosts(): Promise<NotionPost[]> {
 }
 
 export async function getNotionPost(slug: string): Promise<NotionPost | null> {
-	if (!NOTION_API_KEY || !NOTION_DATABASE_ID) {
+	if (!NOTION_API_KEY || !NOTION_DATABASE_ID || NOTION_API_KEY.startsWith('secret_123') || NOTION_DATABASE_ID === '1234567890') {
 		return null;
 	}
 

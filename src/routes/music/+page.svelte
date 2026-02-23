@@ -3,10 +3,10 @@
 	import { site } from '$lib/config';
 	import { MusicPlayer } from '$lib/components/features';
 	import { RotaryKnob } from '$lib/components/ui';
-	import { loadMusicFolders, type MusicFolder } from '$lib/data/music';
+	import type { PageData } from './$types';
 
-	let folders = $state<MusicFolder[]>([]);
-	let loading = $state(true);
+	let { data }: { data: PageData } = $props();
+
 	let outputVolume = $state(70);
 
 	function updateMusicPlayersVolume(volume: number) {
@@ -16,9 +16,7 @@
 		});
 	}
 
-	onMount(async () => {
-		folders = await loadMusicFolders();
-		loading = false;
+	onMount(() => {
 		updateMusicPlayersVolume(outputVolume);
 	});
 </script>
@@ -81,7 +79,7 @@
 					<div class="tape-counter">
 						<span class="font-mono text-[0.4rem] text-tan-dark block text-center mb-0.5">CASSETTES</span>
 						<div class="counter-digits">
-							<span>{folders.length.toString().padStart(3, '0')}</span>
+							<span>{data.folders.length.toString().padStart(3, '0')}</span>
 						</div>
 					</div>
 				</div>
@@ -99,31 +97,7 @@
 				<!-- Textured background pattern -->
 				<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 1px, var(--color-brown) 1px, var(--color-brown) 2px);"></div>
 				
-				{#if loading}
-					<div class="loading-cassette">
-						<!-- Cassette Shell -->
-						<div class="cassette-body">
-							<!-- Label -->
-							<div class="cassette-label-area">
-								<span class="label-text">LOADING</span>
-							</div>
-							
-							<!-- Tape Window -->
-							<div class="tape-window">
-								<div class="spool left spinning"></div>
-								<div class="tape-strip"></div>
-								<div class="spool right spinning"></div>
-							</div>
-							
-							<!-- Bottom Details -->
-							<div class="cassette-bottom">
-								<div class="screw-hole"></div>
-								<div class="head-cutout"></div>
-								<div class="screw-hole"></div>
-							</div>
-						</div>
-					</div>
-				{:else if folders.length === 0}
+				{#if data.folders.length === 0}
 					<div class="empty-state">
 						<div class="empty-display">
 							<span class="font-mono text-sm text-display-text tracking-[0.1em]">NO TAPES FOUND</span>
@@ -131,7 +105,7 @@
 					</div>
 				{:else}
 					<!-- Cassette Players -->
-					{#each folders as folder, i}
+					{#each data.folders as folder, i}
 						<div class="mb-5 last:mb-0 animate-[deck-load_0.5s_ease-out_backwards]" style="animation-delay: {i * 0.15}s">
 							<MusicPlayer tracks={folder.tracks} title={folder.name} />
 						</div>
@@ -329,120 +303,6 @@
 		background: var(--color-brown);
 		border-radius: 1px;
 		box-shadow: inset 0 1px 1px rgba(0,0,0,0.5);
-	}
-
-	/* Loading Cassette */
-	.loading-cassette {
-		display: flex;
-		justify-content: center;
-		padding: 24px 0;
-	}
-
-	.loading-cassette .cassette-body {
-		width: 180px;
-		background: var(--color-beige);
-		border: 2px solid var(--color-tan-dark);
-		border-radius: 6px;
-		padding: 8px;
-		box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-	}
-
-	.loading-cassette .cassette-label-area {
-		background: var(--color-cream);
-		border: 1px solid var(--color-tan);
-		border-radius: 3px;
-		padding: 6px;
-		margin-bottom: 8px;
-		text-align: center;
-	}
-
-	.loading-cassette .label-text {
-		font-family: var(--font-mono);
-		font-size: 0.6rem;
-		font-weight: bold;
-		color: var(--color-brown);
-		letter-spacing: 0.2em;
-		animation: blink 1s ease-in-out infinite;
-	}
-
-	.loading-cassette .tape-window {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		background: var(--color-brown-dark);
-		border: 2px solid var(--color-brown);
-		border-radius: 4px;
-		padding: 10px 14px;
-		margin-bottom: 8px;
-	}
-
-	.loading-cassette .spool {
-		width: 36px;
-		height: 36px;
-		background: var(--color-tan);
-		border: 2px solid var(--color-brown);
-		border-radius: 50%;
-		position: relative;
-	}
-
-	.loading-cassette .spool::before {
-		content: '';
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		width: 12px;
-		height: 12px;
-		background: var(--color-brown-dark);
-		border: 2px solid var(--color-brown);
-		border-radius: 50%;
-		transform: translate(-50%, -50%);
-	}
-
-	.loading-cassette .spool::after {
-		content: '';
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		width: 2px;
-		height: 14px;
-		background: var(--color-beige);
-		transform: translate(-50%, -50%);
-	}
-
-	.loading-cassette .spool.spinning {
-		animation: spin 1.2s linear infinite;
-	}
-
-	.loading-cassette .spool.right {
-		animation-delay: 0.1s;
-	}
-
-	.loading-cassette .tape-strip {
-		flex: 1;
-		height: 2px;
-		background: var(--color-brown);
-		margin: 0 8px;
-	}
-
-	.loading-cassette .cassette-bottom {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 0 8px;
-	}
-
-	.loading-cassette .screw-hole {
-		width: 6px;
-		height: 6px;
-		background: var(--color-brown-dark);
-		border-radius: 50%;
-	}
-
-	.loading-cassette .head-cutout {
-		width: 40px;
-		height: 8px;
-		background: var(--color-brown-dark);
-		border-radius: 2px;
 	}
 
 	/* Empty State */

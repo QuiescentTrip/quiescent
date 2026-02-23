@@ -73,6 +73,9 @@
 			<span class="status-dot active"></span>
 			<span>online</span>
 		</div>
+		<div class="status-row">
+			<iframe width="155" height="155" style="border:none" src="https://dimden.neocities.org/navlink/" name="neolink"></iframe>
+		</div>
 	</nav>
 
 	<!-- Main -->

@@ -189,6 +189,7 @@
 		<audio
 			bind:this={audioElement}
 			src={track.file}
+			preload="none"
 			ontimeupdate={handleTimeUpdate}
 			onended={handleEnded}
 			onloadedmetadata={handleLoadedMetadata}
