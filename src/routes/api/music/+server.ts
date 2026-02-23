@@ -69,6 +69,9 @@ export type MusicFolder = {
 	tracks: Omit<TrackWithMtime, 'mtime'>[];
 };
 
+// Prerender at build time so it works on static hosts
+export const prerender = true;
+
 export const GET: RequestHandler = async () => {
 	try {
 		if (!existsSync(MUSIC_DIR)) {
