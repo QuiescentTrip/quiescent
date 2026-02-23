@@ -59,11 +59,11 @@
 			<span class="status-dot active"></span>
 			<span>online</span>
 		</div>
-		<div class="status-row">
+		<div class="status-row !flex-row !items-center gap-4 md:!flex-col md:!items-start md:gap-2">
 			<iframe title="neocity ad" width="155" height="155" style="border:none" src="https://dimden.neocities.org/navlink/" name="neolink"></iframe>
-		</div>
-		<div class="status-row h-80">
-			<img class="rotate-90 scale-200" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDJpY2p6enBvcWlibnBoMXJxZmcweWJpOGxwZXM0MzhkZ3ZyZTVvOSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13CpJR7THZgaaY/giphy.gif">
+			<div class="h-40 md:h-80 md:w-36 flex items-center justify-center overflow-visible">
+				<img alt="cassette tape" class="h-40 md:w-80 md:pb-1 md:scale-200 md:h-auto md:rotate-90" src="./images/gif/cassette tape GIF.gif">
+			</div>
 		</div>
 	</nav>
 
