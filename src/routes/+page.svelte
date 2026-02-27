@@ -11,7 +11,7 @@
 		{ date: '02/22', text: 'first commit of website' }
 	];
 
-	const webrings = [];
+	const webrings = [{ name: 'kiki broadcast service', prev: 'https://webri.ng/webring/kiki/previous', next: 'https://webri.ng/webring/kiki/next' }];
 
 	const badges = [
 		'./images/buttons/blankbanshee.gif',
@@ -208,8 +208,6 @@
 
 	<!-- Footer -->
 	<footer class="site-footer">
-		<span>made by quiescent</span>
-		<span>·</span>
-		<span>est. 2026</span>
+		<span>scrapped quiescent</span>
 	</footer>
 </div>

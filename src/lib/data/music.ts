@@ -36,10 +36,3 @@ export async function loadMusicFolders(): Promise<MusicFolder[]> {
 		return [];
 	}
 }
-
-// Currently playing - update this manually or connect to Spotify/Last.fm
-export const nowPlaying = {
-	title: 'Song Title',
-	artist: 'Artist Name',
-	progress: 33 // percentage 0-100
-};
