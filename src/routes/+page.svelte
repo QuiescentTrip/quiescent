@@ -170,7 +170,7 @@
 			<div class="section-content">
 				<div class="flex flex-wrap gap-2">
 					{#if webrings.length > 0}
-						{#each webrings as [name, prev, next]}
+						{#each webrings as { name, prev, next }}
 							<div class="webring">
 								<a href={prev}>←</a>
 								<span class="name">{name}</span>
