@@ -1,17 +1,13 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-
+	import FancyButton from '$lib/components/ui/fancyButton.svelte';
+    import { updates } from '$lib/data/siteUpdates';
 	let { data }: { data: PageData } = $props();
 
 	const navLinks = ['/', '/blog', '/music', '#about', '#links'];
 	const navNames = ['home', 'blog', 'music', 'about', 'links'];
 
-	const updates = [
-		{ date: '02/23', text: 'added music player' },
-		{ date: '02/22', text: 'first commit of website' }
-	];
 
-	const webrings = [{ name: 'kiki broadcast service', prev: 'https://webri.ng/webring/kiki/previous', next: 'https://webri.ng/webring/kiki/next' }];
 
 	const badges = [
 		'./images/buttons/blankbanshee.gif',
@@ -39,26 +35,9 @@
 	<nav class="site-nav">
 		<div class="nav-title">navigate</div>
 		{#each navLinks as href, i}
-			<a {href}>
-				{navNames[i]}
-				<span class="nav-stripe-1"></span>
-				<span class="nav-stripe-2"></span>
-				<span class="nav-stripe-3"></span>
-			</a>
+			<FancyButton href={href} text={navNames[i]} />
 		{/each}
 
-		<div class="nav-title">elsewhere</div>
-		<a href="https://neocities.org" target="_blank">
-			Neocities
-			<span class="nav-stripe-1"></span>
-			<span class="nav-stripe-2"></span>
-			<span class="nav-stripe-3"></span>
-		</a>
-
-		<div class="status-row">
-			<span class="status-dot active"></span>
-			<span>online</span>
-		</div>
 		<div class="status-row !flex-row !items-center gap-4 md:!flex-col md:!items-start md:gap-2">
 			<iframe title="neocity ad" width="155" height="155" style="border:none" src="https://dimden.neocities.org/navlink/" name="neolink"></iframe>
 			<div class="h-40 md:h-80 md:w-36 flex items-center justify-center overflow-visible">
@@ -157,7 +136,7 @@
 			<div class="section-content">
 				<h3>cool sites</h3>
 				<div class="entry">
-					<a href="https://neocities.org" target="_blank">Neocities</a>
+					<a href="https://filliplampe.com" target="_blank">mah best friends site!</a>
 				</div>
 				<h3>find me</h3>
 				<a href="https://github.com/QuiescentTrip" class="block py-0.5 text-sm">github</a>
@@ -168,18 +147,18 @@
 		<section class="section full">
 			<h2>webrings</h2>
 			<div class="section-content">
-				<div class="flex flex-wrap gap-2">
-					{#if webrings.length > 0}
-						{#each webrings as { name, prev, next }}
-							<div class="webring">
-								<a href={prev}>←</a>
-								<span class="name">{name}</span>
-								<a href={next}>→</a>
-							</div>
-						{/each}
-					{:else}
-						<span>none yet</span>
-					{/if}
+				<div class="webring-container">
+					<div class="webring-card">
+						<div class="webring-header">
+							<span class="webring-indicator"></span>
+							<span class="webring-title">kikis broadcast network</span>
+						</div>
+						<div class="webring-nav">
+							<a href="https://webri.ng/webring/kiki/previous?via=https%3A%2F%2Fwww.quiescent.net%2F" class="webring-btn">← prev</a>
+							<a href="https://webri.ng/webring/kiki/random?via=https%3A%2F%2Fwww.quiescent.net%2F" class="webring-btn">random</a>
+							<a href="https://webri.ng/webring/kiki/next?via=https%3A%2F%2Fwww.quiescent.net%2F" class="webring-btn">next →</a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
