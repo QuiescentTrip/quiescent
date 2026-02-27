@@ -101,7 +101,9 @@
 				</div>
 			</div>
 		</section>
-
+		<div class="section full">
+			<img src="./images/gif/eye.gif" alt="eye" class="w-full h-full object-cover [image-rendering:pixelated]">
+		</div>
 		<!-- Blog -->
 		<section class="section full">
 			<h2>recent posts</h2>
