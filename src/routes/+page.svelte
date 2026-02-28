@@ -93,41 +93,24 @@
 
 		<!-- About -->
 		<section class="section half" id="about">
-			<h2>about</h2>
+			<h2>about me</h2>
 			<div class="section-content">
-				<p>i like videogames</p>
-			</div>
-		</section>
-
-		<!-- Links -->
-		<section class="section half" id="links">
-			<h2>links</h2>
-			<div class="section-content">
-				<h3>cool sites</h3>
-				<div class="entry">
-					<a href="https://filliplampe.com" target="_blank">mah best friends site!</a>
-				</div>
-				<h3>find me</h3>
-				<a href="https://github.com/QuiescentTrip" class="block py-0.5 text-sm">github</a>
+			<img src="./images/gif/cateatingwire.gif" alt="cat eating wire" class="w-full h-full object-cover [image-rendering:pixelated]">
 			</div>
 		</section>
 
 		<!-- Webrings -->
-		<section class="section full">
+		<section class="section half">
 			<h2>webrings</h2>
-			<div class="section-content">
-				<div class="webring-container">
-					<div class="webring-card">
-						<div class="webring-header">
-							<span class="webring-indicator"></span>
-							<span class="webring-title">kikis broadcast network</span>
-						</div>
-						<div class="webring-nav">
-							<a href="https://webri.ng/webring/kiki/previous?via=https%3A%2F%2Fwww.quiescent.net%2F" class="webring-btn">← prev</a>
-							<a href="https://webri.ng/webring/kiki/random?via=https%3A%2F%2Fwww.quiescent.net%2F" class="webring-btn">random</a>
-							<a href="https://webri.ng/webring/kiki/next?via=https%3A%2F%2Fwww.quiescent.net%2F" class="webring-btn">next →</a>
-						</div>
-					</div>
+			<div class="section-content webring-content">
+				<p class="webring-title">✧ kiki's Broadcast webring ✧</p>
+				<a href="https://webri.ng/webring/kiki/random?via=https%3A%2F%2Fwww.quiescent.net%2F" class="webring-badge">
+					<img src="./images/buttons/kiki.png" alt="kiki's broadcast network" />
+				</a>
+				<div class="webring-arrows">
+					<a href="https://webri.ng/webring/kiki/previous?via=https%3A%2F%2Fwww.quiescent.net%2F">← prev</a>
+					<span class="dot">♡</span>
+					<a href="https://webri.ng/webring/kiki/next?via=https%3A%2F%2Fwww.quiescent.net%2F">next →</a>
 				</div>
 			</div>
 		</section>
@@ -147,9 +130,13 @@
 		<!-- Guestbook -->
 		<section class="section full" id="guestbook">
 			<h2>guestbook</h2>
-			<div class="section-content">
-				<p>leave a message if you stopped by.</p>
-				<p class="text-sm text-brown-light mt-2">(coming soon)</p>
+			<div class="section-content guestbook-content">
+				<iframe 
+					src="https://quiescent.atabook.org/" 
+					title="guestbook"
+					class="guestbook-frame"
+					loading="lazy"
+				></iframe>
 			</div>
 		</section>
 	</div>
@@ -178,5 +165,75 @@
 			grid-template-columns: 1fr;
 			gap: 0.75rem;
 		}
+	}
+
+	.webring-content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.webring-title {
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--color-rust);
+		letter-spacing: 0.03em;
+	}
+
+	.webring-badge {
+		display: block;
+		padding: 4px;
+		background: linear-gradient(135deg, var(--color-cream) 0%, var(--color-beige-light) 100%);
+		border: 2px solid var(--color-rust);
+		border-radius: 6px;
+		box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+		transition: all 0.2s ease;
+	}
+
+	.webring-badge:hover {
+		transform: translateY(-2px) scale(1.02);
+		border-color: var(--color-amber);
+		box-shadow: 0 5px 12px rgba(232, 139, 40, 0.25);
+	}
+
+	.webring-badge img {
+		display: block;
+		height: 187px;
+		width: auto;
+		image-rendering: pixelated;
+	}
+
+	.webring-arrows {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: 0.7rem;
+	}
+
+	.webring-arrows a {
+		color: var(--color-brown);
+		text-decoration: none;
+		transition: color 0.15s ease;
+	}
+
+	.webring-arrows a:hover {
+		color: var(--color-amber);
+	}
+
+	.webring-arrows .dot {
+		color: var(--color-rust);
+		font-size: 0.6rem;
+	}
+
+	.guestbook-content {
+		padding: 0 !important;
+	}
+
+	.guestbook-frame {
+		width: 100%;
+		height: 600px;
+		border: none;
+		display: block;
 	}
 </style>
