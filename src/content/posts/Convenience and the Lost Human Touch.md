@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title:
 date:
 tags:
   - tag1
