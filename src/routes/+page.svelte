@@ -4,8 +4,8 @@
     import { updates } from '$lib/data/siteUpdates';
 	let { data }: { data: PageData } = $props();
 
-	const navLinks = ['/', '/blog', '/music', '#about', '#links'];
-	const navNames = ['home', 'blog', 'music', 'about', 'links'];
+	const navLinks = ['/', '/blog', '/music', '/games', '#about', '#links'];
+	const navNames = ['home', 'blog', 'music', 'games', 'about', 'links'];
 
 
 
