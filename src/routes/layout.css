@@ -473,6 +473,70 @@ code {
 	background: var(--color-tan-dark);
 }
 
+/* === WEBRINGS === */
+.webring-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+}
+
+.webring-card {
+	background: var(--color-beige);
+	border: 2px solid var(--color-tan);
+	padding: 0.5rem;
+	min-width: 200px;
+}
+
+.webring-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 0.5rem;
+	padding-bottom: 0.4rem;
+	border-bottom: 1px solid var(--color-tan);
+}
+
+.webring-indicator {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--color-amber);
+	box-shadow: 0 0 4px var(--color-amber-glow);
+}
+
+.webring-title {
+	font-family: var(--font-mono);
+	font-size: 0.65rem;
+	font-weight: 600;
+	color: var(--color-brown-dark);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.webring-nav {
+	display: flex;
+	gap: 0.25rem;
+}
+
+.webring-btn {
+	flex: 1;
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	text-align: center;
+	padding: 0.3rem 0.5rem;
+	background: var(--color-cream);
+	border: 1px solid var(--color-tan);
+	color: var(--color-brown);
+	text-decoration: none;
+	transition: all 0.1s ease;
+}
+
+.webring-btn:hover {
+	background: var(--color-amber);
+	border-color: var(--color-amber-dim);
+	color: var(--color-brown-dark);
+}
+
 /* === BACKWARDS COMPAT === */
 .retro-box {
 	background: var(--color-beige-light);

@@ -1,13 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import FancyButton from '$lib/components/ui/fancyButton.svelte';
-    import { updates } from '$lib/data/siteUpdates';
+	import { updates } from '$lib/data/siteUpdates';
 	let { data }: { data: PageData } = $props();
-
-	const navLinks = ['/', '/blog', '/music', '/games', '#about', '#links'];
-	const navNames = ['home', 'blog', 'music', 'games', 'about', 'links'];
-
-
 
 	const badges = [
 		'./images/buttons/blankbanshee.gif',
@@ -19,35 +13,8 @@
 	<meta name="description" content="Q" />
 </svelte:head>
 
-<div class="site-container font-body">
-	<!-- Header -->
-	<header class="site-header">
-		<div>
-			<h1>quiescent</h1>
-			<p class="tagline">adjective -- quiet, still, or inactive</p>
-		</div>
-		<div class="display-panel">
-			{new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }).toUpperCase()}
-		</div>
-	</header>
-
-	<!-- Navigation -->
-	<nav class="site-nav">
-		<div class="nav-title">navigate</div>
-		{#each navLinks as href, i}
-			<FancyButton href={href} text={navNames[i]} />
-		{/each}
-
-		<div class="status-row !flex-row !items-center gap-4 md:!flex-col md:!items-start md:gap-2">
-			<iframe title="neocity ad" width="155" height="155" style="border:none" src="https://dimden.neocities.org/navlink/" name="neolink"></iframe>
-			<div class="h-40 md:h-80 md:w-36 flex items-center justify-center overflow-visible">
-				<img alt="cassette tape" class="h-40 md:w-80 md:pb-1 md:scale-200 md:h-auto md:rotate-90" src="./images/gif/cassette tape GIF.gif">
-			</div>
-		</div>
-	</nav>
-
-	<!-- Main -->
-	<main class="site-main">
+<div class="home-page">
+	<div class="home-container">
 		<!-- Welcome -->
 		<section class="section full">
 			<h2>welcome</h2>
@@ -101,9 +68,11 @@
 				</div>
 			</div>
 		</section>
+
 		<div class="section full">
 			<img src="./images/gif/eye.gif" alt="eye" class="w-full h-full object-cover [image-rendering:pixelated]">
 		</div>
+
 		<!-- Blog -->
 		<section class="section full">
 			<h2>recent posts</h2>
@@ -185,10 +154,30 @@
 				<p class="text-sm text-brown-light mt-2">(coming soon)</p>
 			</div>
 		</section>
-	</main>
-
-	<!-- Footer -->
-	<footer class="site-footer">
-		<span>scrapped quiescent</span>
-	</footer>
+	</div>
 </div>
+
+<style>
+	.home-page {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		padding: 1rem;
+		background: var(--color-beige);
+	}
+
+	.home-container {
+		width: 100%;
+		max-width: 800px;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+		align-content: start;
+	}
+
+	@media (max-width: 600px) {
+		.home-container {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

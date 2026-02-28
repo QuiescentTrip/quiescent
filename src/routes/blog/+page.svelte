@@ -16,50 +16,33 @@
 	<title>blog - {siteName}</title>
 </svelte:head>
 
-<div class="site-container font-body">
-	<!-- Header -->
-	<header class="site-header">
-		<div>
-			<a href="/" class="text-rust hover:text-amber text-sm">← back</a>
-		</div>
-		<div class="display-panel">{data.posts.length} posts</div>
-	</header>
-
-	<!-- Sidebar -->
-	<nav class="site-nav">
-		<div class="nav-title">filter</div>
-		<button
-			onclick={() => (selectedTag = null)}
-			class="nav-btn"
-			class:active={selectedTag === null}
-		>
-			all
-		</button>
-		{#each data.tags as tag}
-			<button
-				onclick={() => (selectedTag = tag)}
-				class="nav-btn"
-				class:active={selectedTag === tag}
-			>
-				{tag}
-			</button>
-		{/each}
-
-		<div class="nav-title">navigate</div>
-		<a href="/">
-			home
-			<span class="nav-stripe-1"></span>
-			<span class="nav-stripe-2"></span>
-			<span class="nav-stripe-3"></span>
-		</a>
-	</nav>
-
-	<!-- Main -->
-	<main class="site-main">
+<div class="blog-page">
+	<div class="blog-container">
 		<section class="section full">
 			<h2>blog</h2>
 			<div class="section-content">
 				<p>things i've written.</p>
+				
+				<!-- Filter Tags -->
+				<div class="filter-bar">
+					<span class="filter-label">filter:</span>
+					<button
+						onclick={() => (selectedTag = null)}
+						class="filter-tag"
+						class:active={selectedTag === null}
+					>
+						all
+					</button>
+					{#each data.tags as tag}
+						<button
+							onclick={() => (selectedTag = tag)}
+							class="filter-tag"
+							class:active={selectedTag === tag}
+						>
+							{tag}
+						</button>
+					{/each}
+				</div>
 			</div>
 		</section>
 
@@ -67,7 +50,7 @@
 			<a href="/blog/{post.slug}" class="section full post-card">
 				<h2>{post.title}</h2>
 				<div class="section-content">
-					<div class="flex items-center gap-2 mb-2">
+					<div class="post-meta">
 						<span class="display-panel">{post.date}</span>
 						{#each post.tags as tag}
 							<span class="tag">{tag}</span>
@@ -89,39 +72,63 @@
 				</div>
 			</section>
 		{/if}
-	</main>
-
-	<!-- Footer -->
-	<footer class="site-footer">
-		<a href="/">← home</a>
-	</footer>
+	</div>
 </div>
 
 <style>
-	.nav-btn {
-		display: block;
+	.blog-page {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		padding: 1rem;
+		background: var(--color-beige);
+	}
+
+	.blog-container {
 		width: 100%;
-		padding: 0.4rem 0.75rem;
-		font-size: 0.8rem;
+		max-width: 700px;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.filter-bar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-top: 0.75rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--color-tan);
+	}
+
+	.filter-label {
+		font-family: var(--font-mono);
+		font-size: 0.65rem;
+		color: var(--color-brown-light);
+		text-transform: uppercase;
+	}
+
+	.filter-tag {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		padding: 0.25rem 0.5rem;
+		background: var(--color-cream);
+		border: 1px solid var(--color-tan);
 		color: var(--color-brown);
-		text-decoration: none;
-		border: none;
-		background: transparent;
-		border-left: 2px solid transparent;
 		cursor: pointer;
-		text-align: left;
 		transition: all 0.1s ease;
 	}
 
-	.nav-btn:hover {
-		background: var(--color-cream);
-		border-left-color: var(--color-amber);
+	.filter-tag:hover {
+		background: var(--color-beige);
+		border-color: var(--color-amber);
 	}
 
-	.nav-btn.active {
-		background: var(--color-cream);
-		border-left-color: var(--color-amber);
-		color: var(--color-amber-dim);
+	.filter-tag.active {
+		background: var(--color-amber);
+		border-color: var(--color-amber-dim);
+		color: var(--color-brown-dark);
 	}
 
 	.post-card {
@@ -135,6 +142,14 @@
 
 	.post-card:hover h2 {
 		background: var(--color-amber);
+	}
+
+	.post-meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.tag {

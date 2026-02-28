@@ -19,13 +19,36 @@
 	<meta name="description" content="Play {data.name}" />
 </svelte:head>
 
-<div class="game-page" class:fullscreen={isFullscreen}>
+{#if isFullscreen}
+	<!-- Fullscreen Mode -->
+	<div class="fullscreen-overlay">
+		<div class="fullscreen-cabinet">
+			<div class="cabinet-header">
+				<button class="header-btn" onclick={toggleFullscreen}>← exit</button>
+				<span class="game-title">{data.name}</span>
+				<div></div>
+			</div>
+
+			<div class="fullscreen-screen">
+				<iframe
+					src={gameSrc}
+					title={data.name}
+					class="game-frame"
+					allowfullscreen
+				></iframe>
+			</div>
+		</div>
+	</div>
+{/if}
+
+<!-- Normal Mode -->
+<div class="game-page" class:hidden={isFullscreen}>
 	<div class="game-cabinet">
 		<div class="cabinet-header">
-			<a href="/games" class="back-btn">← games</a>
+			<a href="/games" class="header-btn">← games</a>
 			<span class="game-title">{data.name}</span>
-			<button class="fullscreen-btn" onclick={toggleFullscreen} title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}>
-				{isFullscreen ? 'exit' : 'fullscreen'}
+			<button class="fullscreen-btn" onclick={toggleFullscreen}>
+				fullscreen
 			</button>
 		</div>
 
@@ -49,22 +72,28 @@
 
 <style>
 	.game-page {
-		min-height: 100vh;
-		padding: 1rem;
+		flex: 1;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		padding: 1rem;
 	}
 
-	.game-page.fullscreen {
-		padding: 0;
+	.game-page.hidden {
+		display: none;
+	}
+
+	.fullscreen-overlay {
 		position: fixed;
 		inset: 0;
 		z-index: 1000;
 		background: #1a1814;
+		display: flex;
+		align-items: stretch;
+		justify-content: center;
 	}
 
-	.game-cabinet {
+	.game-cabinet, .fullscreen-cabinet {
 		width: 100%;
 		max-width: 560px;
 		background: linear-gradient(160deg, #c8c0b4 0%, #a89888 50%, #887c70 100%);
@@ -75,9 +104,10 @@
 			inset 0 1px 0 rgba(255, 255, 255, 0.3);
 	}
 
-	.fullscreen .game-cabinet {
+	.fullscreen-cabinet {
 		max-width: none;
 		height: 100%;
+		width: 100%;
 		border-radius: 0;
 		display: flex;
 		flex-direction: column;
@@ -90,31 +120,48 @@
 		padding: 0.5rem 0.75rem;
 		background: linear-gradient(180deg, #5c544a 0%, #4a4238 100%);
 		border-bottom: 2px solid #2e2a24;
+		gap: 0.5rem;
 	}
 
-	.back-btn {
+	.header-btn {
 		font-family: var(--font-mono);
 		font-size: 0.55rem;
 		font-weight: 500;
 		color: #a89880;
 		text-decoration: none;
+		background: none;
+		border: none;
 		padding: 0.25rem 0.5rem;
 		border-radius: 3px;
+		cursor: pointer;
 		transition: all 0.2s ease;
+		min-width: 60px;
+		text-align: left;
 	}
 
-	.back-btn:hover {
+	.header-btn:hover {
 		color: #e8a040;
 		background: rgba(232, 160, 64, 0.1);
 	}
 
 	.game-title {
 		font-family: var(--font-mono);
-		font-size: 0.6rem;
+		font-size: 0.55rem;
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		color: #d4cdc0;
+		text-align: center;
+		flex: 1;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	@media (min-width: 480px) {
+		.game-title {
+			font-size: 0.6rem;
+		}
 	}
 
 	.fullscreen-btn {
@@ -146,11 +193,9 @@
 		aspect-ratio: 1 / 1;
 	}
 
-	.fullscreen .cabinet-screen {
+	.fullscreen-screen {
 		flex: 1;
-		margin: 0;
-		border-radius: 0;
-		aspect-ratio: auto;
+		background: #0a0808;
 	}
 
 	.game-frame {
@@ -167,16 +212,18 @@
 		text-align: center;
 	}
 
-	.fullscreen .cabinet-controls {
-		display: none;
-	}
-
 	.control-hint {
 		font-family: var(--font-mono);
-		font-size: 0.5rem;
+		font-size: 0.45rem;
 		color: #5c544a;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
+	}
+
+	@media (min-width: 480px) {
+		.control-hint {
+			font-size: 0.5rem;
+		}
 	}
 
 	.key {

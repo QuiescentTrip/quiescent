@@ -11,81 +11,88 @@
 	<meta name="description" content="PICO-8 games" />
 </svelte:head>
 
-<div class="min-h-screen p-4 sm:p-8">
-	<div class="max-w-[680px] mx-auto">
-		<div class="games-cabinet">
-			<div class="cabinet-header">
-				<span class="cabinet-label">arcade</span>
-				<div class="cabinet-leds">
-					<span class="led"></span>
-					<span class="led active"></span>
-				</div>
+<div class="games-page">
+	<div class="games-cabinet">
+		<div class="cabinet-header">
+			<span class="cabinet-label">arcade</span>
+			<div class="cabinet-leds">
+				<span class="led"></span>
+				<span class="led active"></span>
 			</div>
+		</div>
 
-			<div class="cabinet-screen">
-				<div class="screen-content">
-					<h1>games</h1>
-					<p class="subtitle">bestest games ever</p>
+		<div class="cabinet-screen">
+			<div class="screen-content">
+				<h1>games</h1>
+				<p class="subtitle">bestest games ever</p>
 
-					{#if data.games.length === 0}
-						<div class="no-games">
-							<p>no games found</p>
-							<p class="hint">drop pico-8 exports into <code>static/games/</code></p>
-						</div>
-					{:else}
-						<div class="game-list">
-							{#each data.games as game}
-								<a href="/games/{game.slug}" class="game-cartridge">
-									<div class="cartridge-top">
-										<span class="cartridge-notch"></span>
-										<span class="cartridge-notch"></span>
-									</div>
-									<div class="cartridge-label" class:has-image={game.label}>
-										{#if game.label}
-											<img 
-												src="/games/{game.slug}/{game.label}" 
-												alt="{game.name} label" 
-												class="label-image"
-											/>
-											<div class="label-overlay">
-												<span class="label-play">▶ play</span>
-											</div>
-										{:else}
-											<div class="label-header">
-												<span class="label-brand">PICO-8</span>
-												<span class="label-led"></span>
-											</div>
-											<div class="label-title">{game.name}</div>
-											<div class="label-footer">
-												<span class="label-id">{game.slug}</span>
-												<span class="label-play">▶ play</span>
-											</div>
-										{/if}
-									</div>
-									<div class="cartridge-bottom">
-										<span class="cartridge-title">{game.name}</span>
-									</div>
-									<div class="cartridge-pins">
-										<span></span><span></span><span></span><span></span>
-									</div>
-								</a>
-							{/each}
-						</div>
-					{/if}
-
-					<a href="/" class="back-link">← back to home</a>
-				</div>
+				{#if data.games.length === 0}
+					<div class="no-games">
+						<p>no games found</p>
+						<p class="hint">drop pico-8 exports into <code>static/games/</code></p>
+					</div>
+				{:else}
+					<div class="game-list">
+						{#each data.games as game}
+							<a href="/games/{game.slug}" class="game-cartridge">
+								<div class="cartridge-top">
+									<span class="cartridge-notch"></span>
+									<span class="cartridge-notch"></span>
+								</div>
+								<div class="cartridge-label" class:has-image={game.label}>
+									{#if game.label}
+										<img 
+											src="/games/{game.slug}/{game.label}" 
+											alt="{game.name} label" 
+											class="label-image"
+										/>
+										<div class="label-overlay">
+											<span class="label-play-btn">▶ play</span>
+										</div>
+									{:else}
+										<div class="label-header">
+											<span class="label-brand">PICO-8</span>
+											<span class="label-led"></span>
+										</div>
+										<div class="label-title">{game.name}</div>
+										<div class="label-footer">
+											<span class="label-id">{game.slug}</span>
+											<span class="label-play">▶ play</span>
+										</div>
+									{/if}
+								</div>
+								<div class="cartridge-bottom">
+									<span class="cartridge-title">{game.name}</span>
+								</div>
+								<div class="cartridge-pins">
+									<span></span><span></span><span></span><span></span>
+								</div>
+							</a>
+						{/each}
+					</div>
+				{/if}
 			</div>
+		</div>
 
-			<div class="cabinet-vents">
-				<span></span><span></span><span></span><span></span><span></span>
-			</div>
+		<div class="cabinet-vents">
+			<span></span><span></span><span></span><span></span><span></span>
 		</div>
 	</div>
 </div>
 
 <style>
+	.games-page {
+		flex: 1;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		padding: 1rem;
+		overflow-x: hidden;
+	}
+
 	.games-cabinet {
+		width: 100%;
+		max-width: 680px;
 		background: linear-gradient(160deg, #c8c0b4 0%, #a89888 50%, #887c70 100%);
 		border-radius: 12px;
 		overflow: hidden;
@@ -133,7 +140,7 @@
 	}
 
 	.cabinet-screen {
-		margin: 1rem;
+		margin: 0.75rem;
 		background: #1a1814;
 		border-radius: 8px;
 		padding: 4px;
@@ -143,8 +150,8 @@
 	.screen-content {
 		background: #2e2a24;
 		border-radius: 6px;
-		padding: 1.5rem;
-		min-height: 300px;
+		padding: 1.25rem;
+		min-height: 250px;
 		color: #e8a040;
 		font-family: var(--font-mono);
 		position: relative;
@@ -167,7 +174,7 @@
 	}
 
 	.screen-content h1 {
-		font-size: 1.5rem;
+		font-size: 1.25rem;
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
@@ -178,9 +185,9 @@
 	}
 
 	.subtitle {
-		font-size: 0.65rem;
+		font-size: 0.6rem;
 		color: #a89880;
-		margin: 0 0 1.5rem 0;
+		margin: 0 0 1.25rem 0;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		position: relative;
@@ -213,10 +220,17 @@
 
 	.game-list {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-		gap: 1rem;
+		grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+		gap: 0.75rem;
 		position: relative;
 		z-index: 1;
+	}
+
+	@media (min-width: 480px) {
+		.game-list {
+			grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+			gap: 1rem;
+		}
 	}
 
 	.game-cartridge {
@@ -256,11 +270,17 @@
 		padding: 8px;
 		background: linear-gradient(135deg, #e8a040 0%, #c07828 100%);
 		border-radius: 3px;
-		min-height: 100px;
+		min-height: 80px;
 		display: flex;
 		flex-direction: column;
 		position: relative;
 		overflow: hidden;
+	}
+
+	@media (min-width: 480px) {
+		.cartridge-label {
+			min-height: 100px;
+		}
 	}
 
 	.cartridge-label.has-image {
@@ -274,7 +294,13 @@
 		object-fit: cover;
 		image-rendering: pixelated;
 		display: block;
-		min-height: 100px;
+		min-height: 80px;
+	}
+
+	@media (min-width: 480px) {
+		.label-image {
+			min-height: 100px;
+		}
 	}
 
 	.label-overlay {
@@ -292,8 +318,7 @@
 		opacity: 1;
 	}
 
-	.label-overlay .label-play {
-		opacity: 1;
+	.label-play-btn {
 		color: #e8a040;
 		font-size: 0.7rem;
 		background: rgba(0, 0, 0, 0.5);
@@ -311,7 +336,7 @@
 
 	.label-brand {
 		font-family: var(--font-mono);
-		font-size: 0.45rem;
+		font-size: 0.4rem;
 		font-weight: 700;
 		color: #2e2a24;
 		text-transform: uppercase;
@@ -340,13 +365,19 @@
 		align-items: center;
 		justify-content: center;
 		font-family: var(--font-mono);
-		font-size: 0.7rem;
+		font-size: 0.6rem;
 		font-weight: 700;
 		color: #2e2a24;
 		text-align: center;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		line-height: 1.2;
+	}
+
+	@media (min-width: 480px) {
+		.label-title {
+			font-size: 0.7rem;
+		}
 	}
 
 	.label-footer {
@@ -360,14 +391,14 @@
 
 	.label-id {
 		font-family: var(--font-mono);
-		font-size: 0.4rem;
+		font-size: 0.35rem;
 		color: #5c544a;
 		text-transform: uppercase;
 	}
 
 	.label-play {
 		font-family: var(--font-mono);
-		font-size: 0.45rem;
+		font-size: 0.4rem;
 		font-weight: 600;
 		color: #2e2a24;
 		text-transform: uppercase;
@@ -386,7 +417,7 @@
 
 	.cartridge-title {
 		font-family: var(--font-mono);
-		font-size: 0.5rem;
+		font-size: 0.45rem;
 		font-weight: 600;
 		color: #a89880;
 		text-transform: uppercase;
@@ -412,21 +443,6 @@
 		height: 3px;
 		background: linear-gradient(180deg, #6a6460 0%, #4a4642 100%);
 		border-radius: 1px;
-	}
-
-	.back-link {
-		display: inline-block;
-		margin-top: 1.5rem;
-		font-size: 0.7rem;
-		color: #8a7c68;
-		text-decoration: none;
-		transition: color 0.2s ease;
-		position: relative;
-		z-index: 1;
-	}
-
-	.back-link:hover {
-		color: #e8a040;
 	}
 
 	.cabinet-vents {

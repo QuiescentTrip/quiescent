@@ -24,50 +24,26 @@
 	<title>{data.meta.title} - {siteName}</title>
 </svelte:head>
 
-<div class="site-container font-body">
-	<!-- Header -->
-	<header class="site-header">
-		<a href="/blog" class="text-rust hover:text-amber text-sm">← blog</a>
-		<div class="display-panel">{data.meta.date}</div>
-	</header>
-
-	<!-- Sidebar -->
-	<aside class="site-nav">
-		<div class="nav-title">this post</div>
-		<div class="p-3 text-xs space-y-2">
-			<div>
-				<span class="text-brown-light">date</span><br/>
-				{data.meta.date}
-			</div>
-			{#if data.meta.tags.length > 0}
-				<div>
-					<span class="text-brown-light">tags</span><br/>
-					{#each data.meta.tags as tag}
-						<span class="tag">{tag}</span>
-					{/each}
-				</div>
-			{/if}
-		</div>
-
-		<div class="nav-title">navigate</div>
-		<a href="/">
-			home
-			<span class="nav-stripe-1"></span>
-			<span class="nav-stripe-2"></span>
-			<span class="nav-stripe-3"></span>
-		</a>
-		<a href="/blog">
-			all posts
-			<span class="nav-stripe-1"></span>
-			<span class="nav-stripe-2"></span>
-			<span class="nav-stripe-3"></span>
-		</a>
-	</aside>
-
-	<!-- Main -->
-	<main class="site-main">
-		<article class="section full">
+<div class="post-page">
+	<div class="post-container">
+		<!-- Post Info Header -->
+		<section class="section full">
 			<h2>{data.meta.title}</h2>
+			<div class="section-content">
+				<div class="post-meta">
+					<span class="display-panel">{data.meta.date}</span>
+					{#if data.meta.tags.length > 0}
+						{#each data.meta.tags as tag}
+							<span class="tag">{tag}</span>
+						{/each}
+					{/if}
+				</div>
+			</div>
+		</section>
+
+		<!-- Post Content -->
+		<article class="section full">
+			<h2>content</h2>
 			<div class="section-content prose">
 				{#if PostContent}
 					<PostContent />
@@ -90,17 +66,40 @@
 				</div>
 			</section>
 		{/if}
-	</main>
 
-	<!-- Footer -->
-	<footer class="site-footer">
-		<a href="/blog">← blog</a>
-		<span>·</span>
-		<a href="/">home</a>
-	</footer>
+		<section class="section full">
+			<h2>navigation</h2>
+			<div class="section-content">
+				<a href="/blog" class="btn">← all posts</a>
+			</div>
+		</section>
+	</div>
 </div>
 
 <style>
+	.post-page {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		padding: 1rem;
+		background: var(--color-beige);
+	}
+
+	.post-container {
+		width: 100%;
+		max-width: 700px;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.post-meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
 	.tag {
 		display: inline-block;
 		font-size: 0.65rem;
@@ -108,8 +107,6 @@
 		background: var(--color-cream);
 		border: 1px solid var(--color-tan);
 		color: var(--color-brown-light);
-		margin-right: 0.25rem;
-		margin-top: 0.25rem;
 	}
 
 	.prose {
