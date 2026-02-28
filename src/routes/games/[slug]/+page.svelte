@@ -72,11 +72,17 @@
 
 <style>
 	.game-page {
-		flex: 1;
+		min-height: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		padding: 1rem;
+	}
+
+	@media (max-width: 600px) {
+		.game-page {
+			padding: 0.75rem;
+		}
 	}
 
 	.game-page.hidden {

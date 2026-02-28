@@ -78,19 +78,26 @@
 
 <style>
 	.post-page {
-		flex: 1;
-		display: flex;
-		justify-content: center;
+		min-height: 100%;
 		padding: 1rem;
-		background: var(--color-beige);
 	}
 
 	.post-container {
-		width: 100%;
 		max-width: 700px;
-		display: flex;
-		flex-direction: column;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 1fr;
 		gap: 1rem;
+	}
+
+	@media (max-width: 600px) {
+		.post-page {
+			padding: 0.75rem;
+		}
+
+		.post-container {
+			gap: 0.75rem;
+		}
 	}
 
 	.post-meta {

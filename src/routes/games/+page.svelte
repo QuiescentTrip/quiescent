@@ -82,12 +82,18 @@
 
 <style>
 	.games-page {
-		flex: 1;
+		min-height: 100%;
 		display: flex;
 		align-items: flex-start;
 		justify-content: center;
 		padding: 1rem;
 		overflow-x: hidden;
+	}
+
+	@media (max-width: 600px) {
+		.games-page {
+			padding: 0.75rem;
+		}
 	}
 
 	.games-cabinet {

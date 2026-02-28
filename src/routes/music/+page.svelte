@@ -111,7 +111,7 @@
 
 			<div class="transport-center hide-mobile">
 				<span class="model-text">STEREO CASSETTE DECK</span>
-				<span class="model-number">MODEL FT-2026</span>
+				<span class="model-number">MODEL Q-2026</span>
 			</div>
 
 			<div class="transport-right">
@@ -139,12 +139,18 @@
 
 <style>
 	.cassette-page {
-		flex: 1;
+		min-height: 100%;
 		display: flex;
 		align-items: flex-start;
 		justify-content: center;
 		padding: 1rem;
 		overflow-x: hidden;
+	}
+
+	@media (max-width: 600px) {
+		.cassette-page {
+			padding: 0.75rem;
+		}
 	}
 
 	.cassette-deck {

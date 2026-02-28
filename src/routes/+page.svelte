@@ -95,9 +95,7 @@
 		<section class="section half" id="about">
 			<h2>about</h2>
 			<div class="section-content">
-				<p>
-				i like videogames
-				</p>
+				<p>i like videogames</p>
 			</div>
 		</section>
 
@@ -159,25 +157,26 @@
 
 <style>
 	.home-page {
-		flex: 1;
-		display: flex;
-		justify-content: center;
+		min-height: 100%;
 		padding: 1rem;
-		background: var(--color-beige);
 	}
 
 	.home-container {
-		width: 100%;
-		max-width: 800px;
+		max-width: 700px;
+		margin: 0 auto;
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		gap: 1rem;
-		align-content: start;
 	}
 
 	@media (max-width: 600px) {
+		.home-page {
+			padding: 0.75rem;
+		}
+
 		.home-container {
 			grid-template-columns: 1fr;
+			gap: 0.75rem;
 		}
 	}
 </style>
