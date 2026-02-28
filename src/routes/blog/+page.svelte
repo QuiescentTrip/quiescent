@@ -10,6 +10,15 @@
 	const filteredPosts = $derived(
 		selectedTag ? data.posts.filter((p) => p.tags.includes(selectedTag as string)) : data.posts
 	);
+
+	function formatDate(dateStr: string): string {
+		const date = new Date(dateStr);
+		return date.toLocaleDateString('en-US', { 
+			year: 'numeric', 
+			month: 'short', 
+			day: 'numeric' 
+		});
+	}
 </script>
 
 <svelte:head>
@@ -49,7 +58,7 @@
 				<h2>{post.title}</h2>
 				<div class="section-content">
 					<div class="post-meta">
-						<span class="display-panel">{post.date}</span>
+						<span class="date-badge">{formatDate(post.date)}</span>
 						{#each post.tags as tag}
 							<span class="tag">{tag}</span>
 						{/each}
@@ -194,15 +203,28 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.4rem;
 		margin-bottom: 0.5rem;
 	}
 
-	.tag {
+	.date-badge {
+		font-family: var(--font-mono);
 		font-size: 0.65rem;
+		color: var(--color-display-text);
+		background: var(--color-display);
+		border: 1px solid var(--color-brown);
+		border-radius: 2px;
 		padding: 0.15rem 0.4rem;
-		background: var(--color-cream);
+		text-shadow: 0 0 4px var(--color-amber-glow);
+	}
+
+	.tag {
+		font-family: var(--font-mono);
+		font-size: 0.6rem;
+		padding: 0.15rem 0.35rem;
+		background: var(--color-beige);
 		border: 1px solid var(--color-tan);
+		border-radius: 2px;
 		color: var(--color-brown-light);
 	}
 </style>
