@@ -1,37 +1,27 @@
 # Games Folder
 
-Drop your exported PICO-8 game folders here.
+Drop your exported PICO-8 game folders here. Games are auto-detected at build time.
 
-Each game should be in its own folder with an HTML file:
+## Adding a Game
+
+1. Export your PICO-8 game (creates HTML + JS files)
+2. Create a folder here with your game files
+3. Optionally add a label image (cover.png or label.png)
 
 ```
-games/
+static/games/
   my-game/
-    my-game.html
-    my-game.js
-    label.png        <- optional: game label/cover image
+    mygame.html
+    mygame.js
+    cover.png    <- optional label image
 ```
 
-The folder name becomes the game's URL slug (e.g., `/games/my-game`).
+## Getting a Label Image
 
-## Adding a Label Image
-
-To show the PICO-8 label on the cartridge:
-
-### Option 1: Use the .p8.png cartridge file
-The `.p8.png` file IS your label! Just copy it and rename to `label.png`:
+**Option 1:** Save as `.p8.png` - it IS the label:
 ```
 save mygame.p8.png
 ```
-Then copy `mygame.p8.png` to your game folder and rename it to `label.png`.
+Copy and rename to `cover.png`.
 
-### Option 2: Screenshot the label
-1. In PICO-8, press `Ctrl+7` to view the label
-2. Press `Ctrl+6` to take a screenshot
-3. Find the screenshot in your PICO-8 screenshots folder
-4. Copy and rename it to `label.png` in your game folder
-
-### Option 3: Any image
-Just add any `label.png`, `label.gif`, or `cover.png` to the game folder.
-
-Supported formats: `.png`, `.gif`, `.jpg`, `.p8.png`
+**Option 2:** Screenshot - press `Ctrl+7` then `Ctrl+6` in PICO-8.
